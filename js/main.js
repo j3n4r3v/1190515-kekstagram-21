@@ -1,12 +1,12 @@
 'use strict';
 
-const pictureTemplate = document.querySelector(`#picture`) // Контент шаблона откуда копируем данные
+const PICTURE_TEMPLATE = document.querySelector(`#picture`) // Контент шаблона откуда копируем данные
   .content
   .querySelector(`.picture`);
-const pictureContainer = document.querySelector(`.pictures`); // Куда вставляем скопированные данные
-let pictureLikes = pictureTemplate.querySelector(`.picture__likes`);
-let pictureComments = pictureTemplate.querySelector(`.picture__comments`);
-let pictureImg = pictureTemplate.querySelector(`.picture__img`);
+const PICTURE_CONTAINER = document.querySelector(`.pictures`); // Куда вставляем скопированные данные
+let pictureLikes = PICTURE_TEMPLATE.querySelector(`.picture__likes`);
+let pictureComments = PICTURE_TEMPLATE.querySelector(`.picture__comments`);
+let pictureImg = PICTURE_TEMPLATE.querySelector(`.picture__img`);
 
 const COMMENT_MESSAGES = [
   {comment: `Всё отлично!`},
@@ -17,7 +17,7 @@ const COMMENT_MESSAGES = [
   {comment: `Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!`}
 ];
 
-const COMMENT_NAMES = [
+const COMMENT_NAMES = [ // Имена это массив. тут идут от 0 - 5 индексы в которых записаны обьекты.
   {name: `Жан`},
   {name: `Маруся`},
   {name: `Петр`},
@@ -26,45 +26,44 @@ const COMMENT_NAMES = [
   {name: `Константа`},
 ];
 
-let OBJECT_COUNT = {
+let objectCount = {
   url: `photos/i.jpg`,
   description: `Описание фотографии`,
-  likes: `getRandomLikes(15, 200)`,
+  likes: getRandomLikes(15, 200),
   comments: {
-    avatar: `img/avatar-getRandomAc(1, 6).svg`,//Пробовал конкатенацией соединить - не получается :(
-    message: `COMMENT_MESSAGES[getRandomAc(1, 6)]`,
-    name: `COMMENT_NAMES[getRandomAc(1, 6)]`
+    avatar: `img/avatar${getRandomAc(1, 6)}.svg`,
+    message: `${COMMENT_MESSAGES[getRandomAc(1, 6)]}`,
+    name: `${COMMENT_NAMES[getRandomAc(1, 6)]}`
   }
 };
 
-let MASSIVE_OBJECT_JS = [OBJECT_COUNT[i]]; //Массив куда будем добавлять 25 сгенерированных Js обьектов
+let massiveObjectJs = [];
 
-//Функциu генерации случайных данных
+// Функциu генерации случайных данных
 
 function getRandomAc(min, max) { // Рандомные значения avatar-message-name
   return Math.random() * (max - min) + min;
-};
+}
 
 function getRandomLikes(min, max) { // Рандомные значения likes
   return Math.random() * (max - min) + min;
-};
+}
 
-//Функция создания DOM-элемента на основе JS-объекта
-let RENDER_OBJECT_COUNT = function (MASSIVE_OBJECT_JS) {
-  for (let i = 0; i < MASSIVE_OBJECT_JS.length; i++) { // Цикл перебора photos от 1-25
-    let pictureElement = pictureTemplate.cloneNode(true);
-    pictureContainer.appendChild(pictureElement);
+// Функция создания DOM-элемента на основе JS-объекта
+let renderTemplateContent = function () {
+  for (let i = 0; i < massiveObjectJs.length; i++) { // Цикл перебора photos от 1-25
+    let pictureElement = PICTURE_TEMPLATE.cloneNode(true);
+    PICTURE_CONTAINER.appendChild(pictureElement);
     pictureLikes.textContent = getRandomLikes(15, 200);
-    OBJECT_COUNT.url = pictureImg.src.textContent;
-  };
+    pictureComments.textContent = Number(objectCount.message);
+    pictureImg.src.textContent = Number(objectCount.url);
+  }
   return pictureElement;
 };
 
 // Функция заполнения блока DOM-элементами на основе массива JS-объектов
 let fragment = document.createDocumentFragment();
-for (var i = 0; i < MASSIVE_OBJECT_JS.length; i++) {
-  fragment.appendChild(RENDER_OBJECT_COUNT(MASSIVE_OBJECT_JS[i]));
+for (let i = 0; i < massiveObjectJs.length; i++) {
+  fragment.appendChild(renderTemplateContent(massiveObjectJs[i]));
 }
-pictureContainer.appendChild(fragment);
-
-/*Я старался понять и сделать сам - но увы,не доходит до конца :(*/
+PICTURE_CONTAINER.appendChild(fragment);
