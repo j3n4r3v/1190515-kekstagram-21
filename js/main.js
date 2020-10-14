@@ -7,8 +7,7 @@ const PICTURE_CONTAINER = document.querySelector(`.pictures`); // Куда вс�
 let pictureLikes = PICTURE_TEMPLATE.querySelector(`.picture__likes`);
 let pictureComments = PICTURE_TEMPLATE.querySelector(`.picture__comments`);
 let pictureImg = PICTURE_TEMPLATE.querySelector(`.picture__img`);
-let pictureElement = PICTURE_TEMPLATE.cloneNode(true); // Копия контента шаблона
-let massivePhotos = []; // Массив куда добавляем обьекты-картинки
+const PHOTOS_AMOUNT = 25;
 
 const COMMENT_MESSAGES = [
   {comment: `Всё отлично!`},
@@ -28,9 +27,15 @@ const COMMENT_NAMES = [
   {name: `Константа`},
 ];
 
+// Функции генерации случайных данных
 
-const createMockObjects = function () {
-  for (let i = 0; i < massivePhotos.length; i++) {
+function getRandom(min, max) { // Рандомные значения
+  return Math.random() * (max - min) + min;
+}
+
+const createMockObjects = function (amount) {
+  const massivePhotos = []; // Массив куда добавляем обьекты-картинки
+  for (let i = 0; i < amount.length; i++) {
     massivePhotos.push({
       url: `photos/${i + 1}.jpg`,
       description: `Описание фотографии`,
@@ -45,38 +50,33 @@ const createMockObjects = function () {
   return massivePhotos;
 };
 
-// Функции генерации случайных данных
-
-function getRandom(min, max) { // Рандомные значения
-  return Math.random() * (max - min) + min;
-}
-
 // Функция создания DOM-элемента(из шаблона - 1 картинки) на основе JS-объекта
-let renderPhoto = function () {
-  for (let i = 0; i < massivePhotos.length; i++) {
-    PICTURE_CONTAINER.appendChild(pictureElement);
-    pictureLikes.textContent = getRandom(15, 200);
-    pictureComments.textContent = massivePhotos[i].comments;
-    pictureImg.src = massivePhotos[i].url;
-    pictureImg.alt.textContent = massivePhotos[i].description;
-  }
+let renderPhoto = function (photo) {
+
+  const pictureElement = PICTURE_TEMPLATE.cloneNode(true); // Копия контента
+
+  pictureLikes.textContent = getRandom(15, 200);
+  pictureComments.textContent = photo.comments;
+  pictureImg.src = photo.url;
+  pictureImg.alt.textContent = photo.description;
+
   return pictureElement;
 };
 /* Тут я через функцию, методом перебора беру из шаблона контент, заполняю его относительно cвойств
-заданного обьекта и возвращаю уже заполненный шаблон по индексу массива*/
+заданного обьекта и возвращаю уже заполненный шаблон 1 картинки*/
 
 // Функция заполнения блока DOM-элементами путем формирования 1 фрагмента(где все картинки,)  на основе массива из i сгенерированных JS-объектов
-const renderAllPhotos = function () {
+const renderAllPhotos = function (photos) {
   let photosFragment = document.createDocumentFragment();
-  for (let i = 0; i < massivePhotos.length; i++) {
-    photosFragment.appendChild(renderPhoto(massivePhotos[i]));
+  for (let i = 0; i < photos.length; i++) {
+    photosFragment.appendChild(renderPhoto(photos[i]));
   }
   return photosFragment;
 };
 /* Тут я через функцию, методом перебора беру из "готовых шаблонов" формирую один фрагмент,
 чтобы за один раз вставить все в контейнер*/
 
-const mockPhotos = createMockObjects(massivePhotos.length);
+const mockPhotos = createMockObjects(PHOTOS_AMOUNT);
 /* В функцию создания массива с обьектами я передаю количество фотографий и сохраняю в переменную */
 
 PICTURE_CONTAINER.appendChild(renderAllPhotos(mockPhotos));
