@@ -7,6 +7,7 @@ const PICTURE_CONTAINER = document.querySelector(`.pictures`); // Куда вс�
 let pictureLikes = PICTURE_TEMPLATE.querySelector(`.picture__likes`);
 let pictureComments = PICTURE_TEMPLATE.querySelector(`.picture__comments`);
 let pictureImg = PICTURE_TEMPLATE.querySelector(`.picture__img`);
+// let pictureTitle = PICTURE_CONTAINER.querySelector(`.pictures__title`).classList.remove(`visually-hidden`);
 const PHOTOS_AMOUNT = 25;
 
 const COMMENT_MESSAGES = [
@@ -29,22 +30,34 @@ const COMMENT_NAMES = [
 
 // Функции генерации случайных данных
 
-function getRandom(min, max) { // Рандомные значения
-  return Math.random() * (max - min) + min;
+function getRandom(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; // Максимум и минимум включаются
 }
 
+const getRandomFrom = (arr) => arr[getRandom(0, arr.length - 1)];
+
+const generateComments = function (amount) {
+  const comments = [];
+  for (let i = 0; i < amount; i++) {
+    comments.push({
+      avatar: `img/avatar - ${getRandom(1, 6)}.svg`, // Так и непонял как проверить аватары на картинках
+      message: getRandomFrom(COMMENT_MESSAGES),
+      name: getRandomFrom(COMMENT_NAMES) // Так и непонял как проверить имена на картинках
+    });
+  }
+  return comments;
+};
+
 const createMockObjects = function (amount) {
-  const massivePhotos = []; // Массив куда добавляем обьекты-картинки
-  for (let i = 0; i < amount.length; i++) {
+  const massivePhotos = [];
+  for (let i = 0; i <= amount; i++) {
     massivePhotos.push({
-      url: `photos/${i + 1}.jpg`,
+      url: `photos/${i + 1}.jpg`, // Не отрисовывает 1 картинку, ошибки не вижу!
       description: `Описание фотографии`,
-      likes: getRandom(15, 200),
-      comments: {
-        avatar: `img/avatar${getRandom(1, 6)}.svg`,
-        message: `${COMMENT_MESSAGES[getRandom(1, 6)]}`,
-        name: `${COMMENT_NAMES[getRandom(0, COMMENT_NAMES.length - 1)]}`
-      }
+      likes: Math.round(getRandom(15, 200)),
+      comments: generateComments(getRandom(1, 6)) // Как сделать больше 1 коммента?
     });
   }
   return massivePhotos;
@@ -55,10 +68,10 @@ let renderPhoto = function (photo) {
 
   const pictureElement = PICTURE_TEMPLATE.cloneNode(true); // Копия контента
 
-  pictureLikes.textContent = getRandom(15, 200);
-  pictureComments.textContent = photo.comments;
-  pictureImg.src = photo.url;
-  pictureImg.alt.textContent = photo.description;
+  pictureLikes.textContent = photo.likes;
+  pictureComments.textContent = photo.comments.length;
+  pictureImg.src = `${photo.url}`; // Тут можно через settatribute - но у мну картинки отрисовываются, работает и так кажись
+  pictureImg.alt = `${photo.description}`;
 
   return pictureElement;
 };
@@ -66,10 +79,10 @@ let renderPhoto = function (photo) {
 заданного обьекта и возвращаю уже заполненный шаблон 1 картинки*/
 
 // Функция заполнения блока DOM-элементами путем формирования 1 фрагмента(где все картинки,)  на основе массива из i сгенерированных JS-объектов
-const renderAllPhotos = function (photos) {
+const renderAllPhotos = function (massivePhotos) { // До этого была переменная photos и разницы я не вижу
   let photosFragment = document.createDocumentFragment();
-  for (let i = 0; i < photos.length; i++) {
-    photosFragment.appendChild(renderPhoto(photos[i]));
+  for (let i = 0; i < massivePhotos.length; i++) {
+    photosFragment.appendChild(renderPhoto(massivePhotos[i]));
   }
   return photosFragment;
 };
