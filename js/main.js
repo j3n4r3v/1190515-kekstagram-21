@@ -7,7 +7,8 @@ const PICTURE_CONTAINER = document.querySelector(`.pictures`); // Куда вс�
 let pictureLikes = PICTURE_TEMPLATE.querySelector(`.picture__likes`);
 let pictureComments = PICTURE_TEMPLATE.querySelector(`.picture__comments`);
 let pictureImg = PICTURE_TEMPLATE.querySelector(`.picture__img`);
-let pictureElement = PICTURE_TEMPLATE.cloneNode(true);
+let pictureElement = PICTURE_TEMPLATE.cloneNode(true); // Копия контента шаблона
+let massivePhotos = []; // Массив куда добавляем обьекты-картинки
 
 const COMMENT_MESSAGES = [
   {comment: `Всё отлично!`},
@@ -27,70 +28,56 @@ const COMMENT_NAMES = [
   {name: `Константа`},
 ];
 
-let objectCount = {
-  url: `photos/i.jpg`,
-  description: `Описание фотографии`,
-  likes: getRandomLikes(15, 200),
-  comments: {
-    avatar: `img/avatar${getRandomAc(1, 6)}.svg`,
-    message: `${COMMENT_MESSAGES[getRandomAc(1, 6)]}`,
-    name: `${COMMENT_NAMES[getRandomAc(0, 5)]}`
-    /* В массиве имен всего 6 обьектов, но с 0-5 индексы обьектов. По идее,
-    нужно в рандом-функцию входящие значения переопределить на 0-5 вместо 1-6 */
-  }
-};
 
-let massiveObjectJs = []; // Сюда я собираюсь добавить готовые 25 обьектов в массив
+const createMockObjects = function () {
+  for (let i = 0; i < massivePhotos.length; i++) {
+    massivePhotos.push({
+      url: `photos/${i + 1}.jpg`,
+      description: `Описание фотографии`,
+      likes: getRandom(15, 200),
+      comments: {
+        avatar: `img/avatar${getRandom(1, 6)}.svg`,
+        message: `${COMMENT_MESSAGES[getRandom(1, 6)]}`,
+        name: `${COMMENT_NAMES[getRandom(0, COMMENT_NAMES.length - 1)]}`
+      }
+    });
+  }
+  return massivePhotos;
+};
 
 // Функции генерации случайных данных
 
-function getRandomAc(min, max) { // Рандомные значения avatar-message-name
+function getRandom(min, max) { // Рандомные значения
   return Math.random() * (max - min) + min;
 }
 
-function getRandomLikes(min, max) { // Рандомные значения likes
-  return Math.random() * (max - min) + min;
-}
-
-// Функция создания DOM-элемента(из шаблона) на основе JS-объекта
-let renderTemplateContent = function () {
-  for (let i = 0; i < massiveObjectJs.length; i++) { // Цикл перебора обьектов от 1-25
+// Функция создания DOM-элемента(из шаблона - 1 картинки) на основе JS-объекта
+let renderPhoto = function () {
+  for (let i = 0; i < massivePhotos.length; i++) {
     PICTURE_CONTAINER.appendChild(pictureElement);
-    pictureLikes.textContent = getRandomLikes(15, 200);
-    pictureComments.textContent = objectCount.comments;
-    pictureImg.src = objectCount.url;
-    pictureImg.alt.textContent = objectCount.description;
+    pictureLikes.textContent = getRandom(15, 200);
+    pictureComments.textContent = massivePhotos[i].comments;
+    pictureImg.src = massivePhotos[i].url;
+    pictureImg.alt.textContent = massivePhotos[i].description;
   }
   return pictureElement;
 };
 /* Тут я через функцию, методом перебора беру из шаблона контент, заполняю его относительно cвойств
-заданного обьекта и возвращаю уже заполненный шаблон по индексу*/
+заданного обьекта и возвращаю уже заполненный шаблон по индексу массива*/
 
-// Функция заполнения блока DOM-элементами на основе массива из 25 сгенерированных JS-объектов
-let fragment = document.createDocumentFragment();
-for (let i = 0; i < massiveObjectJs.length; i++) {
-  fragment.appendChild(renderTemplateContent(massiveObjectJs[i]));
-}
-PICTURE_CONTAINER.appendChild(fragment);
+// Функция заполнения блока DOM-элементами путем формирования 1 фрагмента(где все картинки,)  на основе массива из i сгенерированных JS-объектов
+const renderAllPhotos = function () {
+  let photosFragment = document.createDocumentFragment();
+  for (let i = 0; i < massivePhotos.length; i++) {
+    photosFragment.appendChild(renderPhoto(massivePhotos[i]));
+  }
+  return photosFragment;
+};
 /* Тут я через функцию, методом перебора беру из "готовых шаблонов" формирую один фрагмент,
 чтобы за один раз вставить все в контейнер*/
 
-/* По поваду мока инфы я не нашел ок (в задании 3.1 его вообще нет, даже примера), потому есть лишь предположение -
-это нужно заменить createDocumentFragment() возможно им:
+const mockPhotos = createMockObjects(massivePhotos.length);
+/* В функцию создания массива с обьектами я передаю количество фотографий и сохраняю в переменную */
 
-const createMockObjects = (length = 25) { const cards = []; for (let i = 0; i < length; i++) {
-cards.push({ url:... description: ... }); } return cards; }
-
-Я так понял что:
-1.длина - массива кол-во обьектов, 25
-2.cards - мой массив куда я буду добавлять значения
-3.cards.push(по моей логике тут идут значения обьекта что я должен передать с objectCount: {
-  url: `photos/i.jpg`,
-  description: `Описание фотографии`,
-  likes: getRandomLikes(15, 200),
-  comments: {
-    avatar: `img/avatar${getRandomAc(1, 6)}.svg`,
-    message: `${COMMENT_MESSAGES[getRandomAc(1, 6)]}`,
-    name: `${COMMENT_NAMES[getRandomAc(0, 5)]})
-4. return cards - возвращаю значения своего массива
-*/
+PICTURE_CONTAINER.appendChild(renderAllPhotos(mockPhotos));
+/* В контейнер куда нужно "отрисовать" все фотографии, я добавляю массив картинок */
