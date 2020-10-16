@@ -109,7 +109,7 @@ const renderBigPicture = (photo) => {
   body.classList.add(`modal-open`);
 };
 
-const renderBigPictureComments = (comments, PutItem) => {
+const renderBigPictureComments = (comments, container) => {
   for (let i = 0; i < comments.length; i++) {
     const commentListItem = document.createElement(`li`);
     commentListItem.classList.add(`social__comment`);
@@ -128,9 +128,9 @@ const renderBigPictureComments = (comments, PutItem) => {
     commentListItem.appendChild(commentImage);
     commentListItem.appendChild(commentText);
 
-    PutItem.appendChild(commentListItem);
+    container.appendChild(commentListItem);
   }
 };
 
 const mockPhotos = createMockObjects(PHOTOS_AMOUNT);
-renderBigPicture(mockPhotos[1]);
+renderBigPicture(mockPhotos[0]);
