@@ -133,4 +133,4 @@ const renderBigPictureComments = (comments, ShowMore) => {
 };
 
 const mockPhotos = createMockObjects(PHOTOS_AMOUNT);
-renderBigPicture(mockPhotos[3]);
+renderBigPicture(mockPhotos[1]);
