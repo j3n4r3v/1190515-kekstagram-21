@@ -43,7 +43,7 @@ const generateComments = function (amount) {
   const comments = [];
   for (let i = 0; i < amount; i++) {
     comments.push({
-      avatar: `img/avatar - ${getRandom(MIN_AVATARS, MAX_AVATARS)}.svg`,
+      avatar: `img/avatar-${getRandom(MIN_AVATARS, MAX_AVATARS)}.svg`,
       message: getRandomFrom(COMMENT_MESSAGES),
       name: getRandomFrom(COMMENT_NAMES)
     });
@@ -91,7 +91,7 @@ const renderBigPicture = (photo) => {
   const bigPicture = document.querySelector(`.big-picture`);
   bigPicture.classList.remove(`hidden`);
 
-  bigPicture.querySelector(`.big-picture__img img`).setAttribute(`src`, `photo.url`);
+  bigPicture.querySelector(`.big-picture__img img`).setAttribute(`src`, `${photo.url}`);
   bigPicture.querySelector(`.likes-count`).textContent = photo.likes;
   bigPicture.querySelector(`.comments-count`).textContent = photo.comments.length;
   bigPicture.querySelector(`.social__caption`).textContent = photo.description;
