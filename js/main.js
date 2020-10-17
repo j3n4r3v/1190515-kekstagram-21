@@ -134,3 +134,30 @@ const renderBigPictureComments = (comments, container) => {
 
 const mockPhotos = createMockObjects(PHOTOS_AMOUNT);
 renderBigPicture(mockPhotos[0]);
+
+/*
+  (function renderBigPictureComments(comments, container) {
+    const commentListItem = document.createElement(`li`);
+    commentListItem.classList.add(`social__comment`);
+
+    const commentText = document.createElement(`p`);
+    commentText.classList.add(`social__text`);
+
+    const commentImage = document.createElement(`img`);
+    commentImage.classList.add(`social__picture`);
+
+    comments.forEach((comment) => {
+      commentImage.setAttribute(`src`, `${comment.avatar}`);
+      commentImage.setAttribute(`alt`, `${comment.name}`);
+      commentImage.setAttribute(`width`, `35`);
+      commentImage.setAttribute(`height`, `35`);
+    });
+    comments.forEach((comment) => {
+      commentText.textContent = comment.message;
+    });
+
+    commentListItem.appendChild(commentImage);
+    commentListItem.appendChild(commentText);
+    container.appendChild(commentListItem);
+  }())}
+*/
