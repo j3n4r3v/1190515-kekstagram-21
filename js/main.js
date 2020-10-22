@@ -88,7 +88,6 @@ let renderPhoto = function (photo) {
 
 const renderBigPicture = (photo) => {
   const bigPicture = document.querySelector(`.big-picture`);
-  // bigPicture.classList.remove(`hidden`);
 
   bigPicture.querySelector(`.big-picture__img img`).setAttribute(`src`, `${photo.url}`);
   bigPicture.querySelector(`.likes-count`).textContent = photo.likes;
@@ -271,10 +270,6 @@ const effectLevelHandler = function () { // проверяет что дейст
   imgPreview.style.filter = ``; // Стили для изображения фильтра убираем если нет эффектов фильтра
 };
 
-/* const hashtagsAmount = function (hashtaglist) { // Проверяем количество хэштегов
-  return hashtaglist.length > MAX_HASHTAGS_AMOUNT; // Длина списка хештегов больше макс. кол-ва хештегов
-}; */
-
 const hashtagsRepeat = function (hashtag, hashtaglist) { // Проверяет чтобы не было одинаковых хэштегов
   for (let j = 0; j < hashtaglist.length; j++) {
     if (hashtag === hashtaglist[j]) {
@@ -288,10 +283,6 @@ const showValidationMessage = (avr) => {
   hashtagsText.setCustomValidity(avr);
   hashtagsText.reportValidity();
 };
-
-/* const hashtagQuantitySymbols = function (hashtag) {
-  return hashtag.length > MAX_HASHTAG_CHARACTERS;
-}; */
 
 const hashtagValidity = function () { // Проверяем на валидность введенный хештег
   const hashes = hashtagsText.value.toLowerCase().trim();
