@@ -131,18 +131,16 @@ const mockPhotos = createMockObjects(PHOTOS_AMOUNT);
 renderBigPicture(mockPhotos[0]);
 
 // 4.1
-const onOverlayEscPress = (evt) => { // Закрытие по Ескейп окна формы
-  if (evt.key === `Escape`) { // возвращает значение клавиши, нажатой пользователем
-    if (evt.target === hashtagsText) { // Проверяет что в фокусе поле для ввода хэштегов, если оно в фокусе то esc не закрывает окно
-      evt.preventDefault();
-    } else {
-      evt.preventDefault(); // Для чего тут нужно писать сие? Какие случаи?
-    }
+const onOverlayEscPress = (evt) => {
+  if (hashtagsText === document.activeElement) {
+    return evt;
+  }
+  if (evt.key === `Escape`) {
     uploadOverlay.classList.add(`hidden`);
     body.classList.remove(`modal-open`);
   }
+  return evt;
 };
-// };
 
 const openOverlay = function () { // Открытие окна формы
   uploadOverlay.classList.remove(`hidden`);
@@ -155,8 +153,8 @@ const closeOverlay = function () { // Закрытие окна формы
   uploadOverlay.classList.add(`hidden`); // Закрываем форму редактирования изображения
   body.classList.remove(`modal-open`); // Удаляем модальное окно
   document.removeEventListener(`keydown`, onOverlayEscPress); // Удаляем обработчик события нажатия кнопки на Ескейп
-  scaleSmaller.removeEventListener(`click`, declineScale); // Удаляем обработчик события уменьшения размера
-  scaleBigger.removeEventListener(`click`, increaseScale); // Удаляем обработчик события увеличеняи размера
+  decreaseScale.removeEventListener(`click`, decreaseScale); // Удаляем обработчик события уменьшения размера
+  increaseScale.removeEventListener(`click`, increaseScale); // Удаляем обработчик события увеличеняи размера
   upload.value = ``;
   imgPreview.style.transform = `scale(1)`;
   imgPreview.style.filter = ``;
@@ -164,7 +162,7 @@ const closeOverlay = function () { // Закрытие окна формы
   hashtagsText.value = ``;
 };
 
-const declineScale = function () { // Уменьшение размера изображения
+const decreaseScale = function () { // Уменьшение размера изображения
   const value = parseInt(scaleValue.value, 10);
   if (value > 25) {
     const valueNew = value - 25;
@@ -184,9 +182,9 @@ const increaseScale = function () { // Увеличение размера из�
   }
 };
 
-const MAX_HASHTAGS = 5;
-const MAX_SYMBOL = 20;
-const REG = /#[a-zA-Zа-яА-ЯёЁ0-9]{1,19}/i; // Вот зачем тут нужно i?
+const MAX_HASHTAGS_AMOUNT = 5;
+const MAX_HASHTAG_CHARACTERS = 20;
+const HASHTAG_PATTERN = /#[a-zA-Zа-яА-ЯёЁ0-9]{1,19}/i; // Вот зачем тут нужно i?
 
 
 const EFFECTS = { // Эффекты для браузеров
@@ -231,10 +229,13 @@ const EFFECTS_ACTION = { // CSS-стили картинки внутри .img-up
 };
 
 const VALIDATION_MESSAGES = { // Проверка валидации при отправке формы
-  maxTags: `не больше 5 хэштегов`,
-  repeatTags: `хэштеги не должны повторяться`,
-  regularTags: `недопустимые символы`,
-  numberTags: `длина хэштега не более 20 символов`,
+  maxTags: `не больше 5 хэштегов.`,
+  repeatTags: `хэштеги не должны повторяться.`,
+  regularTags: `недопустимые символы.`,
+  numberTags: `длина хэштега не более 20 символов.`,
+  hashTagStarts: `хэш-тег начинается с символа # (решётка).`,
+  hashTagLength: `хеш-тег не может состоять только из одной решётки.`,
+  success: ``,
 };
 
 const effectChangeHandler = function (evt) { // Функция переключения эффектов
@@ -252,17 +253,17 @@ const effectChangeHandler = function (evt) { // Функция переключ�
   }
 };
 
-const getFilterValue = function (value, min, max) { // Высчитывает коэффициент для фильтра: значение фильтра(min..max)
-  return ((value * (max - min)) / 100) + min;
+const getValueRange = function (value, min, max) { // Высчитывает коэффициент для фильтра: значение фильтра(min..max)
+  return value * (max - min) + min;
 };
 
 const getFilter = function (effect, value) { // Подставляет коэффициент + склеивает коэффициент с нужным фильтром
-  value = getFilterValue(value, effect.min, effect.max);
+  value = getValueRange(value, effect.min, effect.max);
   return `${effect.filter}(${value}${effect.unit})`;
 };
 
 const effectLevelHandler = function () { // проверяет что действительно нажат один из фильтров и используя все предыдущие функции считает коэффициент и применяет фильтр
-  const value = parseInt(effectLevel.value, 10); // принимает строку в качестве аргумента и возвращает целое число в соответствии с указанным основанием системы счисления
+  const value = parseInt(effectLevel.value, 10); // "20" превращает в 20, принимает строку в качестве аргумента и возвращает целое число в соответствии с указанным основанием системы счисления
   if (imgPreview.className in EFFECTS_ACTION) { // Если уже содержится эффект в классе дефолтного изображения
     imgPreview.style.filter = getFilter(EFFECTS_ACTION[imgPreview.className], value);
     return; // Возвращает imgPreview.style.filter = нужный фильтр, почему именно это значение?
@@ -270,53 +271,66 @@ const effectLevelHandler = function () { // проверяет что дейст
   imgPreview.style.filter = ``; // Стили для изображения фильтра убираем если нет эффектов фильтра
 };
 
-const hashtagsAmount = function (hashtaglist) { // Проверяем количество хэштегов
-  return hashtaglist.length > MAX_HASHTAGS; // Длина списка хештегов больше макс. кол-ва хештегов
-};
+/* const hashtagsAmount = function (hashtaglist) { // Проверяем количество хэштегов
+  return hashtaglist.length > MAX_HASHTAGS_AMOUNT; // Длина списка хештегов больше макс. кол-ва хештегов
+}; */
 
 const hashtagsRepeat = function (hashtag, hashtaglist) { // Проверяет чтобы не было одинаковых хэштегов
   for (let j = 0; j < hashtaglist.length; j++) {
     if (hashtag === hashtaglist[j]) {
-      return true; // Если будут совпадения - вернет "тру"
+      return true;
     }
   }
-  return false; // Если совпадений не будет, вернет "фолс"
+  return false;
 };
 
-const regularHashtagCheck = function (hashtag) { // Проверка хештегов по условиям регулярного выражения
-  return !REG.test(hashtag); // Если впереди ! - это знак отрицания, тест не пройден - результат выполнения функции
+const showValidationMessage = (avr) => {
+  hashtagsText.setCustomValidity(avr);
+  hashtagsText.reportValidity();
 };
 
-const hashtagQuantitySymbols = function (hashtag) { // Проверяет чтобы хэштег был не длиннее 20 символов
-  return hashtag.length > MAX_SYMBOL; // Функция выполняется если длина более 20 символов?
-};
+/* const hashtagQuantitySymbols = function (hashtag) {
+  return hashtag.length > MAX_HASHTAG_CHARACTERS;
+}; */
 
 const hashtagValidity = function () { // Проверяем на валидность введенный хештег
-  const hashtags = hashtagsText.value.toLowerCase().trim().split(` `); // Значение поля хештега преобразует в нижний регистр,  удаляем пробельные символы с начала и конца строки,разбиваем объект String на массив строк путём разделения строки указанной подстрокой
-  if (hashtagsAmount(hashtags)) { // Если функция проверки хештегов выполняется
-    return hashtagsText.setCustomValidity(VALIDATION_MESSAGES.maxTags); // Выводим подсказку "не больше 5 хэштегов"
+  const hashes = hashtagsText.value.toLowerCase().trim();
+  if (!hashes) {
+    return ``;
+  }
+  const hashtags = hashes.split(` `);
+  if (hashtags.length > MAX_HASHTAGS_AMOUNT) {
+    return VALIDATION_MESSAGES.maxTags;
   }
   for (let i = 0; i < hashtags.length; i++) {
-    const hashtag = hashtags[i]; // Мы тут сравниваем какой хештег с каждым элементом хештега?
-    if (hashtagsRepeat(hashtag, hashtags.slice(i + 1))) { // Проверяем на повторение хештегов между 1 и массивом из оставшихся хештегов
-      return hashtagsText.setCustomValidity(VALIDATION_MESSAGES.repeatTags);// Выводим подсказку "хэштеги не должны повторяться"
+    if (!hashtags[i].startsWith(`#`)) {
+      return VALIDATION_MESSAGES.hashTagStarts;
     }
-    if (regularHashtagCheck(hashtags)) { // Если не проходит проверка хештегов по условиям регулярного выражения
-      return hashtagsText.setCustomValidity(VALIDATION_MESSAGES.regularTags); // Выводим подсказку "недопустимые символы"
+    if (hashtags[i].length === 1) {
+      return VALIDATION_MESSAGES.hashTagLength;
     }
-    if (hashtagQuantitySymbols(hashtags)) { // Если больше 20 символов у хештегов
-      return hashtagsText.setCustomValidity(VALIDATION_MESSAGES.numberTags); // Выводим подсказку `длина хэштега не более 20 символов`
+    if (hashtagsRepeat(hashtags[i], hashtags.slice(i + 1))) {
+      return VALIDATION_MESSAGES.repeatTags;
+    }
+    if ((!hashtags[i].match(HASHTAG_PATTERN))) {
+      return VALIDATION_MESSAGES.regularTags;
+    }
+    if (hashtags[i].length > MAX_HASHTAG_CHARACTERS) {
+      return VALIDATION_MESSAGES.numberTags;
     }
   }
-  return hashtagsText.setCustomValidity(``); // Во всех остальных случаях - подсказку не выводим
+  return VALIDATION_MESSAGES.success;
 };
 
-const formSubmit = function (evt) { // Отправка формы
+const formSubmit = (evt) => {
   evt.preventDefault();
-  if (hashtagValidity()) { // Проверка на валидность
+  const validationMessage = hashtagValidity();
+  showValidationMessage(validationMessage);
+  if (validationMessage === VALIDATION_MESSAGES.success) {
     form.submit();
   }
 };
+
 const body = document.querySelector(`body`);
 const upload = document.querySelector(`#upload-file`); // Контрол загрузки файла
 const uploadOverlay = document.querySelector(`.img-upload__overlay`); // Форма редактирования изображения
@@ -330,15 +344,8 @@ uploadCancel.addEventListener(`click`, function () { // Закрытие щел�
   closeOverlay();
 });
 
-uploadCancel.addEventListener(`keydown`, function (evt) { // Закрытие по ентеру кнопки-крестика
-  if (evt.key === `Enter`) {
-    closeOverlay();
-  }
-});
-// А как же закрытие по пробелу, когда крестик в фокусе - так ведь тоже срабатывает?
-
-const scaleSmaller = document.querySelector(`.scale__control--smaller`); // Уменьшить размер изображения
-const scaleBigger = document.querySelector(`.scale__control--bigger`); //  Увеличить размера изображения
+const scaleDecrease = document.querySelector(`.scale__control--smaller`); // Уменьшить размер изображения
+const scaleIncrease = document.querySelector(`.scale__control--bigger`); //  Увеличить размера изображения
 const scaleValue = document.querySelector(`.scale__control--value`); // Величина изображения
 const form = document.querySelector(`.img-upload__form`); // Форма для отправки данных
 const imgPreview = form.querySelector(`.img-upload__preview img`); // Предварительный просмотр изображения - маленькое фото
@@ -347,11 +354,11 @@ const effectLevel = filterScale.querySelector(`.effect-level__value`); // Пол
 const pin = filterScale.querySelector(`.effect-level__pin`); // Ползунок в слайдере
 const hashtagsText = document.querySelector(`.text__hashtags`); // Поле для хэш-тега
 
-scaleSmaller.addEventListener(`click`, function () { // Обработчик события уменьшения размера
-  declineScale(); // Функция уменьшения размера
+scaleDecrease.addEventListener(`click`, function () { // Обработчик события уменьшения размера
+  decreaseScale(); // Функция уменьшения размера
 });
 
-scaleBigger.addEventListener(`click`, function () { // Обработчик события увеличения размера
+scaleIncrease.addEventListener(`click`, function () { // Обработчик события увеличения размера
   increaseScale(); // Функция увеличения размера
 });
 
@@ -361,4 +368,4 @@ pin.addEventListener(`mouseup`, effectLevelHandler); // Почему тут на
 
 hashtagsText.addEventListener(`input`, hashtagValidity); // Введение хештега - проверка на валидность
 
-form.addEventListener(`submit`, formSubmit); // Отправляя форму - выполняется функция проверки на валидность
+form.addEventListener(`submit`, formSubmit); // проверки на валидность
