@@ -1,9 +1,9 @@
 'use strict';
 
-const PICTURE_TEMPLATE = document.querySelector(`#picture`)
+const picturesTemplate = document.querySelector(`#picture`)
   .content
   .querySelector(`.picture`);
-const PICTURE_CONTAINER = document.querySelector(`.pictures`);
+const picturesContainer = document.querySelector(`.pictures`);
 const PHOTOS_AMOUNT = 25;
 const MIN_COMMENTS = 2;
 const MAX_COMMENTS = 6;
@@ -54,6 +54,7 @@ const createMockObjects = function (amount) {
   const massivePhotos = [];
   for (let i = 0; i < amount; i++) {
     massivePhotos.push({
+      id: i,
       url: `photos/${i + 1}.jpg`,
       description: `Описание фотографии`,
       likes: Math.round(getRandom(MIN_LIKES, MAX_LIKES)),
@@ -64,9 +65,8 @@ const createMockObjects = function (amount) {
 };
 
 let renderPhoto = function (photo) {
-
-  const pictureElement = PICTURE_TEMPLATE.cloneNode(true);
-
+  const pictureElement = picturesTemplate.cloneNode(true);
+  pictureElement.href = `#` + photo.id;
   pictureElement.querySelector(`.picture__likes`).textContent = photo.likes;
   pictureElement.querySelector(`.picture__comments`).textContent = photo.comments.length;
   pictureElement.querySelector(`.picture__img`).src = `${photo.url}`;
@@ -75,13 +75,12 @@ let renderPhoto = function (photo) {
   return pictureElement;
 };
 
-
 (function () {
   const photosFragment = document.createDocumentFragment();
   createMockObjects(PHOTOS_AMOUNT).forEach((item) => {
     photosFragment.appendChild(renderPhoto(item));
   });
-  PICTURE_CONTAINER.appendChild(photosFragment);
+  picturesContainer.appendChild(photosFragment);
 }());
 
 // 3.2
@@ -132,13 +131,13 @@ renderBigPicture(mockPhotos[0]);
 // 4.1
 const onOverlayEscPress = (evt) => {
   if (hashtagsText === document.activeElement) {
-    return evt;
+    return;
   }
   if (evt.key === `Escape`) {
     uploadOverlay.classList.add(`hidden`);
     body.classList.remove(`modal-open`);
   }
-  return evt;
+  return;
 };
 
 const openOverlay = function () { // Открытие окна формы
@@ -230,7 +229,7 @@ const EFFECTS_ACTION = { // CSS-стили картинки внутри .img-up
 const VALIDATION_MESSAGES = { // Проверка валидации при отправке формы
   maxTags: `не больше 5 хэштегов.`,
   repeatTags: `хэштеги не должны повторяться.`,
-  regularTags: `недопустимые символы.`,
+  regularTags: `строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;.`,
   numberTags: `длина хэштега не более 20 символов.`,
   hashTagStarts: `хэш-тег начинается с символа # (решётка).`,
   hashTagLength: `хеш-тег не может состоять только из одной решётки.`,
@@ -284,9 +283,9 @@ const showValidationMessage = (avr) => {
   hashtagsText.reportValidity();
 };
 
-const hashtagValidity = function () { // Проверяем на валидность введенный хештег
+const hashtagValidity = function () {
   const hashes = hashtagsText.value.toLowerCase().trim();
-  if (!hashes) {
+  if (!HASHTAG_PATTERN.test(hashes)) {
     return ``;
   }
   const hashtags = hashes.split(` `);
@@ -303,13 +302,14 @@ const hashtagValidity = function () { // Проверяем на валидно�
     if (hashtagsRepeat(hashtags[i], hashtags.slice(i + 1))) {
       return VALIDATION_MESSAGES.repeatTags;
     }
-    if ((!hashtags[i].match(HASHTAG_PATTERN))) {
+    if (!HASHTAG_PATTERN.test(hashtags[i])) {
       return VALIDATION_MESSAGES.regularTags;
     }
     if (hashtags[i].length > MAX_HASHTAG_CHARACTERS) {
       return VALIDATION_MESSAGES.numberTags;
     }
   }
+  hashtagsText.reportValidity();
   return VALIDATION_MESSAGES.success;
 };
 
@@ -331,8 +331,11 @@ upload.addEventListener(`change`, function () { // Изменение состо
   openOverlay();
 });
 
-uploadCancel.addEventListener(`click`, function () { // Закрытие щелчком мышкой кнопки-крестика
+uploadCancel.addEventListener(`click`, function (evt) { // Закрытие щелчком мышкой кнопки-крестика
   closeOverlay();
+  if (evt.key === `Enter`) {
+    closeOverlay();
+  }
 });
 
 const scaleDecrease = document.querySelector(`.scale__control--smaller`); // Уменьшить размер изображения
@@ -349,8 +352,8 @@ scaleDecrease.addEventListener(`click`, function () { // Обработчик с
   decreaseScale(); // Функция уменьшения размера
 });
 
-scaleIncrease.addEventListener(`click`, function () { // Обработчик события увеличения размера
-  increaseScale(); // Функция увеличения размера
+scaleIncrease.addEventListener(`click`, function () {
+  increaseScale();
 });
 
 form.addEventListener(`change`, effectChangeHandler); // Изменения в форме - заупск функции переключения эффектов
@@ -360,3 +363,67 @@ pin.addEventListener(`mouseup`, effectLevelHandler); // Почему тут на
 hashtagsText.addEventListener(`input`, hashtagValidity); // Введение хештега - проверка на валидность
 
 form.addEventListener(`submit`, formSubmit); // проверки на валидность
+
+/* // 4.2
+const bigPicture = document.querySelector(`.big-picture`);
+const socialCommentText = bigPicture.querySelector(`.social__footer-text`);
+const closeBigPicture = bigPicture.querySelector(`.big-picture__cancel`);
+
+const onBigPictureEsc = function (evt) {
+  if (evt.key === `Escape`) {
+    evt.preventDefault();
+    bigPicture.classList.add(`hidden`);
+    socialCommentText.value = ``;
+    document.removeEventListener(`keydown`, onBigPictureEsc);
+  }
+};
+
+const modalOpenHandler = (evt) => {
+  for (let i = 0; i < massivePhotos.length; i++) {
+    if (parseInt(evt.target.closest(`.picture`).hash.slice(1), 10) === massivePhotos[i].id) {
+      renderBigPicture(massivePhotos[i]);
+      bigPicture.classList.remove(`hidden`);
+      document.addEventListener(`keydown`, onBigPictureEsc);
+    }
+  }
+};
+
+const closeModalOpen = () => {
+  bigPicture.classList.add(`hidden`);
+  socialCommentText.value = ``;
+  document.removeEventListener(`keydown`, onBigPictureEsc);
+};
+
+// const picturesContainer = document.querySelector(`.pictures`);
+const photosFragment = document.createDocumentFragment();
+
+const massivePhotos = createMockObjects(PHOTOS_AMOUNT);
+for (let i = 0; i < massivePhotos.length; i++) {
+  photosFragment.append(renderPhoto(massivePhotos[i]));
+}
+picturesContainer.append(photosFragment);
+
+const socialCommentCount = document.querySelector(`.social__comment-count`);
+const commentLoader = bigPicture.querySelector(`.comments-loader`);
+socialCommentCount.classList.add(`hidden`);
+commentLoader.classList.add(`hidden`);
+
+const commentsText = form.querySelector(`.text__description`);
+
+document.querySelectorAll(`.picture`).forEach((element) => {
+  element.addEventListener(`click`, modalOpenHandler);
+  element.addEventListener(`keydown`, function (evt) {
+    if (evt.key === `Enter`) {
+      modalOpenHandler();
+    }
+  });
+});
+
+closeBigPicture.addEventListener(`click`, closeModalOpen);
+
+closeBigPicture.addEventListener(`keydown`, function (evt) {
+  if (evt.key === `Enter`) {
+    closeModalOpen();
+  }
+});
+*/
