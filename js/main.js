@@ -130,8 +130,8 @@ const mockPhotos = createMockObjects(PHOTOS_AMOUNT);
 renderBigPicture(mockPhotos[0]);
 
 // 4.1
-const onOverlayEscPress = (evt) => {
-  if (hashtagsText === document.activeElement) {
+const onOverlayEscPush = (evt) => {
+  if (hashtagsText === document.activeElement || commentsText === document.activeElement) {
     return;
   }
   if (evt.key === `Escape`) {
@@ -144,7 +144,7 @@ const openOverlay = function () {
   uploadOverlay.classList.remove(`hidden`);
   body.classList.add(`modal-open`);
   filterScale.classList.add(`hidden`);
-  document.addEventListener(`keydown`, onOverlayEscPress);
+  document.addEventListener(`keydown`, onOverlayEscPush);
   hashtagsText.addEventListener(`input`, onTextHashtagsInput);
   pin.addEventListener(`mouseup`, effectLevelHandler);
   form.addEventListener(`change`, effectChangeHandler);
@@ -154,7 +154,7 @@ const openOverlay = function () {
 const closeOverlay = function () {
   uploadOverlay.classList.add(`hidden`);
   body.classList.remove(`modal-open`);
-  document.removeEventListener(`keydown`, onOverlayEscPress);
+  document.removeEventListener(`keydown`, onOverlayEscPush);
   decreaseScale.removeEventListener(`click`, decreaseScale);
   increaseScale.removeEventListener(`click`, increaseScale);
   hashtagsText.removeEventListener(`input`, onTextHashtagsInput);
@@ -359,4 +359,73 @@ scaleDecrease.addEventListener(`click`, function () {
 
 scaleIncrease.addEventListener(`click`, function () {
   increaseScale();
+});
+
+// 4.2
+
+const commentsText = form.querySelector(`.text__description`);
+const picturesContainer = document.querySelector(`.pictures`);
+const photosFragment = document.createDocumentFragment();
+const massivePhotos = createMockObjects(PHOTOS_AMOUNT);
+
+for (let i = 0; i < massivePhotos.length; i++) {
+  photosFragment.append(renderPhoto(massivePhotos[i]));
+}
+picturesContainer.append(photosFragment);
+
+const bigPicture = document.querySelector(`.big-picture`);
+const closeBigPicture = bigPicture.querySelector(`.big-picture__cancel`);
+const socialCommentText = bigPicture.querySelector(`.social__footer-text`);
+const socialCommentCount = document.querySelector(`.social__comment-count`);
+const commentLoader = bigPicture.querySelector(`.comments-loader`);
+
+socialCommentCount.classList.add(`hidden`);
+commentLoader.classList.add(`hidden`);
+
+const onBigPictureEsc = function (evt) {
+  if (evt.key === `Escape`) {
+    evt.preventDefault();
+    closeModalOpen();
+  }
+};
+
+const modalOpenHandler = (evt) => {
+  for (let i = 0; i < massivePhotos.length; i++) {
+    if (parseInt(evt.target.closest(`.picture`).hash.slice(1), 10) === massivePhotos[i].id) {
+      renderBigPicture(massivePhotos[i]);
+      bigPicture.classList.remove(`hidden`);
+      document.addEventListener(`keydown`, onBigPictureEsc);
+    }
+  }
+};
+
+const closeModalOpen = () => {
+  bigPicture.classList.add(`hidden`);
+  socialCommentText.value = ``;
+  document.removeEventListener(`keydown`, onBigPictureEsc);
+};
+
+uploadCancel.addEventListener(`keydown`, (evt) => {
+  if (evt.key === `Enter`) {
+    closeOverlay();
+  }
+});
+
+const onPushEnter = (evt, callback) => {
+  if (evt.key === `Enter`) {
+    callback(evt);
+  }
+};
+
+document.querySelectorAll(`.picture`).forEach((object) => {
+  object.addEventListener(`click`, modalOpenHandler);
+  object.addEventListener(`keydown`, function (evt) {
+    onPushEnter(evt, modalOpenHandler);
+  });
+});
+
+closeBigPicture.addEventListener(`click`, closeModalOpen);
+
+closeBigPicture.addEventListener(`keydown`, function (evt) {
+  onPushEnter(evt, modalOpenHandler);
 });
