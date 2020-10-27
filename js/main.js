@@ -140,56 +140,60 @@ const onOverlayEscPress = (evt) => {
   return;
 };
 
-const openOverlay = function () { // Открытие окна формы
+const openOverlay = function () {
   uploadOverlay.classList.remove(`hidden`);
-  body.classList.add(`modal-open`); // Открытие модального окна
+  body.classList.add(`modal-open`);
   filterScale.classList.add(`hidden`);
-  document.addEventListener(`keydown`, onOverlayEscPress); // Обработчик события на документ весь, закрытие по ескейп
+  document.addEventListener(`keydown`, onOverlayEscPress);
   hashtagsText.addEventListener(`input`, onTextHashtagsInput);
   pin.addEventListener(`mouseup`, effectLevelHandler);
+  form.addEventListener(`change`, effectChangeHandler);
+  form.addEventListener(`submit`, formSubmit);
 };
 
-const closeOverlay = function () { // Закрытие окна формы
-  uploadOverlay.classList.add(`hidden`); // Закрываем форму редактирования изображения
-  body.classList.remove(`modal-open`); // Удаляем модальное окно
-  document.removeEventListener(`keydown`, onOverlayEscPress); // Удаляем обработчик события нажатия кнопки на Ескейп
-  decreaseScale.removeEventListener(`click`, decreaseScale); // Удаляем обработчик события уменьшения размера
-  increaseScale.removeEventListener(`click`, increaseScale); // Удаляем обработчик события увеличеняи размера
+const closeOverlay = function () {
+  uploadOverlay.classList.add(`hidden`);
+  body.classList.remove(`modal-open`);
+  document.removeEventListener(`keydown`, onOverlayEscPress);
+  decreaseScale.removeEventListener(`click`, decreaseScale);
+  increaseScale.removeEventListener(`click`, increaseScale);
   hashtagsText.removeEventListener(`input`, onTextHashtagsInput);
   pin.removeEventListener(`mouseup`, effectLevelHandler);
+  form.removeEventListener(`change`, effectChangeHandler);
+  form.removeEventListener(`submit`, formSubmit);
   upload.value = ``;
   imgPreview.style.transform = `scale(1)`;
   imgPreview.style.filter = ``;
-  imgPreview.className = ``; // Очищаем значения
+  imgPreview.className = ``;
   hashtagsText.value = ``;
 };
 
-const decreaseScale = function () { // Уменьшение размера изображения
+const decreaseScale = function () {
   const value = parseInt(scaleValue.value, 10);
   if (value > 25) {
     const valueNew = value - 25;
-    scaleValue.value = valueNew + `%`; // Поле изменения значения, его значение %
+    scaleValue.value = valueNew + `%`;
     const valueTransform = valueNew / 100;
     imgPreview.style.transform = `scale(${valueTransform})`;
   }
 };
 
-const increaseScale = function () { // Увеличение размера изображения
+const increaseScale = function () {
   const value = parseInt(scaleValue.value, 10);
   if (value < 100) {
-    const valueNew = value + 25; // Шаг изменения масштаба
-    scaleValue.value = valueNew + `%`; // Добавляем %
-    const valueTransform = valueNew / 100; // Добавляем коеффициет масштабa
+    const valueNew = value + 25;
+    scaleValue.value = valueNew + `%`;
+    const valueTransform = valueNew / 100;
     imgPreview.style.transform = `scale(${valueTransform})`;
   }
 };
 
 const MAX_HASHTAGS_AMOUNT = 5;
 const MAX_HASHTAG_CHARACTERS = 20;
-const HASHTAG_PATTERN = /#[a-zA-Zа-яА-ЯёЁ0-9]{1,19}/i; // Вот зачем тут нужно i?
+const HASHTAG_PATTERN = /#[a-zA-Zа-яА-ЯёЁ0-9]{1,19}/i;
 
 
-const EFFECTS = { // Эффекты для браузеров
+const EFFECTS = {
   chrome: `effects__preview--chrome`,
   sepia: `effects__preview--sepia`,
   marvin: `effects__preview--marvin`,
@@ -197,7 +201,7 @@ const EFFECTS = { // Эффекты для браузеров
   heat: `effects__preview--heat`,
 };
 
-const EFFECTS_ACTION = { // CSS-стили картинки внутри .img-upload__preview обновляются следующим образом
+const EFFECTS_ACTION = {
   'effects__preview--chrome': {
     filter: `grayscale`,
     unit: ``,
@@ -230,51 +234,51 @@ const EFFECTS_ACTION = { // CSS-стили картинки внутри .img-up
   }
 };
 
-const VALIDATION_MESSAGES = { // Проверка валидации при отправке формы
+const VALIDATION_MESSAGES = {
   maxTags: `не больше 5 хэштегов.`,
   repeatTags: `хэштеги не должны повторяться.`,
-  regularTags: `недопустимые символы.`,
+  regularTags: `строка после # должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.`,
   notRegularTags: `нельзя использовать спецсимволы(#, @, $ и т.п.), за исключением октоторпа в начале хеш- тега, символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.`,
   numberTags: `длина хэштега не более 20 символов.`,
-  hashTagStarts: `хэш-тег начинается с символа # (решётка).`,
-  hashTagLength: `хеш-тег не может состоять только из одной решётки.`,
-  success: ``,
+  hashTagStarts: `xеш-тег не может состоять только из одного #.`,
+  hashTagFirstSymbol: `xеш - тег должен начинаться #.`,
+  success: ``
 };
 
-const effectChangeHandler = function (evt) { // Функция переключения эффектов
+const effectChangeHandler = function (evt) {
   if (evt.target.matches(`input[type='radio']`)) {
-    effectLevel.value = 100; // Уровень насыщенности сбрасывается до начального значения (100%)
-    if (evt.target.value in EFFECTS) { // Если значение с эффектами
-      filterScale.classList.remove(`hidden`); // Показываем блок uзменения глубины эффекта
-      imgPreview.removeAttribute(`style`); // Убираем стилизацию
-      imgPreview.className = EFFECTS[evt.target.value]; // Добавляем класс эффектов
-    } else if (evt.target.value === `none`) { // Если нет эффектов
-      filterScale.classList.add(`hidden`); // Прячем блок uзменения глубины эффекта
-      imgPreview.className = ``; // Убираем класс
-      imgPreview.style.filter = ``; // Убираем стили фильтра
+    effectLevel.value = 100;
+    if (evt.target.value in EFFECTS) {
+      filterScale.classList.remove(`hidden`);
+      imgPreview.removeAttribute(`style`);
+      imgPreview.className = EFFECTS[evt.target.value];
+    } else if (evt.target.value === `none`) {
+      filterScale.classList.add(`hidden`);
+      imgPreview.className = ``;
+      imgPreview.style.filter = ``;
     }
   }
 };
 
-const getValueRange = function (value, min, max) { // Высчитывает коэффициент для фильтра: значение фильтра(min..max)
+const getValueRange = function (value, min, max) {
   return value * (max - min) + min;
 };
 
-const getFilter = function (effect, value) { // Подставляет коэффициент + склеивает коэффициент с нужным фильтром
+const getFilter = function (effect, value) {
   value = getValueRange(value, effect.min, effect.max);
   return `${effect.filter}(${value}${effect.unit})`;
 };
 
-const effectLevelHandler = function () { // проверяет что действительно нажат один из фильтров и используя все предыдущие функции считает коэффициент и применяет фильтр
-  const value = parseInt(effectLevel.value, 10); // "20" превращает в 20, принимает строку в качестве аргумента и возвращает целое число в соответствии с указанным основанием системы счисления
-  if (imgPreview.className in EFFECTS_ACTION) { // Если уже содержится эффект в классе дефолтного изображения
+const effectLevelHandler = function () {
+  const value = parseInt(effectLevel.value, 10);
+  if (imgPreview.className in EFFECTS_ACTION) {
     imgPreview.style.filter = getFilter(EFFECTS_ACTION[imgPreview.className], value);
-    return; // Возвращает imgPreview.style.filter = нужный фильтр, почему именно это значение?
+    return;
   }
-  imgPreview.style.filter = ``; // Стили для изображения фильтра убираем если нет эффектов фильтра
+  imgPreview.style.filter = ``;
 };
 
-const hashtagsRepeat = function (hashtag, hashtaglist) { // Проверяет чтобы не было одинаковых хэштегов
+const hashtagsRepeat = function (hashtag, hashtaglist) {
   for (let j = 0; j < hashtaglist.length; j++) {
     if (hashtag === hashtaglist[j]) {
       return true;
@@ -327,15 +331,15 @@ const formSubmit = (evt) => {
 };
 
 const body = document.querySelector(`body`);
-const upload = document.querySelector(`#upload-file`); // Контрол загрузки файла
-const uploadOverlay = document.querySelector(`.img-upload__overlay`); // Форма редактирования изображения
-const uploadCancel = uploadOverlay.querySelector(`#upload-cancel`); // Кнопка для закрытия формы редактирования изображения - ентер, пробел, ескейп и мышка
+const upload = document.querySelector(`#upload-file`);
+const uploadOverlay = document.querySelector(`.img-upload__overlay`);
+const uploadCancel = uploadOverlay.querySelector(`#upload-cancel`);
 
-upload.addEventListener(`change`, function () { // Изменение состояния контрола загрузки (загрузка фото)
+upload.addEventListener(`change`, function () {
   openOverlay();
 });
 
-uploadCancel.addEventListener(`click`, function () { // Закрытие щелчком мышкой кнопки-крестика
+uploadCancel.addEventListener(`click`, function () {
   closeOverlay();
 });
 
@@ -349,13 +353,10 @@ const effectLevel = filterScale.querySelector(`.effect-level__value`); // Пол
 const pin = filterScale.querySelector(`.effect-level__pin`); // Ползунок в слайдере
 const hashtagsText = document.querySelector(`.text__hashtags`); // Поле для хэш-тега
 
-scaleDecrease.addEventListener(`click`, function () { // Обработчик события уменьшения размера
-  decreaseScale(); // Функция уменьшения размера
+scaleDecrease.addEventListener(`click`, function () {
+  decreaseScale();
 });
 
-scaleIncrease.addEventListener(`click`, function () { // Обработчик события увеличения размера
-  increaseScale(); // Функция увеличения размера
+scaleIncrease.addEventListener(`click`, function () {
+  increaseScale();
 });
-
-form.addEventListener(`change`, effectChangeHandler); // Изменения в форме - заупск функции переключения эффектов
-form.addEventListener(`submit`, formSubmit); // проверки на валидность
