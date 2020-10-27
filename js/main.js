@@ -382,7 +382,7 @@ const commentLoader = bigPicture.querySelector(`.comments-loader`);
 socialCommentCount.classList.add(`hidden`);
 commentLoader.classList.add(`hidden`);
 
-const onBigPictureEsc = function (evt) {
+const onBigPictureEscPush = function (evt) {
   if (evt.key === `Escape`) {
     evt.preventDefault();
     closeModalOpen();
@@ -394,7 +394,7 @@ const modalOpenHandler = (evt) => {
     if (parseInt(evt.target.closest(`.picture`).hash.slice(1), 10) === massivePhotos[i].id) {
       renderBigPicture(massivePhotos[i]);
       bigPicture.classList.remove(`hidden`);
-      document.addEventListener(`keydown`, onBigPictureEsc);
+      document.addEventListener(`keydown`, onBigPictureEscPush);
     }
   }
 };
@@ -402,7 +402,7 @@ const modalOpenHandler = (evt) => {
 const closeModalOpen = () => {
   bigPicture.classList.add(`hidden`);
   socialCommentText.value = ``;
-  document.removeEventListener(`keydown`, onBigPictureEsc);
+  document.removeEventListener(`keydown`, onBigPictureEscPush);
 };
 
 uploadCancel.addEventListener(`keydown`, (evt) => {
@@ -411,21 +411,17 @@ uploadCancel.addEventListener(`keydown`, (evt) => {
   }
 });
 
-const onPushEnter = (evt, callback) => {
+const onPushEnter = function (evt, callback) {
   if (evt.key === `Enter`) {
     callback(evt);
   }
 };
 
-document.querySelectorAll(`.picture`).forEach((object) => {
-  object.addEventListener(`click`, modalOpenHandler);
-  object.addEventListener(`keydown`, function (evt) {
-    onPushEnter(evt, modalOpenHandler);
+document.querySelectorAll(`.picture`).forEach((elm) => {
+  elm.addEventListener(`click`, modalOpenHandler);
+  elm.addEventListener(`keydown`, (evt) => {
+    onPushEnter(evt, modalOpenHandler());
   });
 });
 
 closeBigPicture.addEventListener(`click`, closeModalOpen);
-
-closeBigPicture.addEventListener(`keydown`, function (evt) {
-  onPushEnter(evt, modalOpenHandler);
-});
