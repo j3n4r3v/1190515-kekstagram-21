@@ -190,7 +190,7 @@ const increaseScale = function () {
 
 const MAX_HASHTAGS_AMOUNT = 5;
 const MAX_HASHTAG_CHARACTERS = 20;
-const HASHTAG_PATTERN = /#[a-zA-Zа-яА-ЯёЁ0-9]{1,19}/i;
+const HASHTAG_PATTERN = /^[\w]*$/; // /#[a-zA-Zа-яА-ЯёЁ0-9]{1,19}/i;
 
 
 const EFFECTS = {
@@ -298,7 +298,7 @@ const hashtagValidity = function () { // Проверяем на валидно�
     if (hashtags[i].length > MAX_HASHTAG_CHARACTERS) {
       customValidityMessage = `${VALIDATION_MESSAGES.numberTag}`;
     }
-    if (hashtags[i].startsWith(`#`) && hashtags[i].length === 1) {
+    if (/* hashtags[i].startsWith(`#`) &&*/ hashtags[i].length === 1) {
       customValidityMessage = `${VALIDATION_MESSAGES.hashTagStarts}`;
     }
     if (!hashtags[i].startsWith(`#`) && HASHTAG_PATTERN.test(hashtags[i]) && hashtags[i].length > 0) {
@@ -307,7 +307,7 @@ const hashtagValidity = function () { // Проверяем на валидно�
     if (!hashtags[i].startsWith(`#`) && !HASHTAG_PATTERN.test(hashtags[i])) {
       customValidityMessage = `${VALIDATION_MESSAGES.notRegularTags}`;
     }
-    if (hashtags[i].startsWith(`#`) && hashtags[i].length > 1 && !HASHTAG_PATTERN.test(hashtags[i].substring(1))) {
+    if (/* hashtags[i].startsWith(`#`) &&*/ hashtags[i].length > 1 && !HASHTAG_PATTERN.test(hashtags[i].substring(1))) {
       customValidityMessage = `${VALIDATION_MESSAGES.regularTags}`;
     }
     if (hashtagsRepeat(hashtags[i], hashtags.slice(i + 1))) {
