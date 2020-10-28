@@ -1,9 +1,9 @@
 'use strict';
 
-const PICTURE_TEMPLATE = document.querySelector(`#picture`)
+/* const PICTURE_TEMPLATE = document.querySelector(`#picture`)
   .content
-  .querySelector(`.picture`);
-const PICTURE_CONTAINER = document.querySelector(`.pictures`);
+  .querySelector(`.picture`); */
+// const PICTURE_CONTAINER = document.querySelector(`.pictures`);
 const PHOTOS_AMOUNT = 25;
 const MIN_COMMENTS = 2;
 const MAX_COMMENTS = 6;
@@ -64,7 +64,7 @@ const createMockObjects = function (amount) {
   return massivePhotos;
 };
 
-let renderPhoto = function (photo) {
+/* let renderPhoto = function (photo) {
 
   const pictureElement = PICTURE_TEMPLATE.cloneNode(true);
   pictureElement.href = `#` + photo.id;
@@ -74,16 +74,7 @@ let renderPhoto = function (photo) {
   pictureElement.querySelector(`.picture__img`).alt = `${photo.description}`;
 
   return pictureElement;
-};
-
-
-(function () {
-  const photosFragment = document.createDocumentFragment();
-  createMockObjects(PHOTOS_AMOUNT).forEach((item) => {
-    photosFragment.appendChild(renderPhoto(item));
-  });
-  PICTURE_CONTAINER.appendChild(photosFragment);
-}());
+}; */
 
 // 3.2
 
@@ -168,22 +159,26 @@ const closeOverlay = function () {
   hashtagsText.value = ``;
 };
 
+const STEP = 25;
+const MIN_SCALE = STEP;
+const MAX_SCALE = 100;
+
 const decreaseScale = function () {
   const value = parseInt(scaleValue.value, 10);
-  if (value > 25) {
-    const valueNew = value - 25;
+  if (value > MIN_SCALE) {
+    const valueNew = value - MIN_SCALE;
     scaleValue.value = valueNew + `%`;
-    const valueTransform = valueNew / 100;
+    const valueTransform = valueNew / MAX_SCALE;
     imgPreview.style.transform = `scale(${valueTransform})`;
   }
 };
 
 const increaseScale = function () {
   const value = parseInt(scaleValue.value, 10);
-  if (value < 100) {
-    const valueNew = value + 25;
+  if (value < MAX_SCALE) {
+    const valueNew = value + MIN_SCALE;
     scaleValue.value = valueNew + `%`;
-    const valueTransform = valueNew / 100;
+    const valueTransform = valueNew / MAX_SCALE;
     imgPreview.style.transform = `scale(${valueTransform})`;
   }
 };
