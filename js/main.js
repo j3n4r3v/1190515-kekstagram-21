@@ -293,7 +293,7 @@ const hashtagValidity = function () { // Проверяем на валидно�
     if (hashtags[i].length > MAX_HASHTAG_CHARACTERS) {
       customValidityMessage = `${VALIDATION_MESSAGES.numberTag}`;
     }
-    if (/* hashtags[i].startsWith(`#`) &&*/ hashtags[i].length === 1) {
+    if (hashtags[i].length === 1) {
       customValidityMessage = `${VALIDATION_MESSAGES.hashTagStarts}`;
     }
     if (!hashtags[i].startsWith(`#`) && HASHTAG_PATTERN.test(hashtags[i]) && hashtags[i].length > 0) {
@@ -302,7 +302,7 @@ const hashtagValidity = function () { // Проверяем на валидно�
     if (!hashtags[i].startsWith(`#`) && !HASHTAG_PATTERN.test(hashtags[i])) {
       customValidityMessage = `${VALIDATION_MESSAGES.notRegularTags}`;
     }
-    if (/* hashtags[i].startsWith(`#`) &&*/ hashtags[i].length > 1 && !HASHTAG_PATTERN.test(hashtags[i].substring(1))) {
+    if (hashtags[i].length > 1 && !HASHTAG_PATTERN.test(hashtags[i].substring(1))) {
       customValidityMessage = `${VALIDATION_MESSAGES.regularTags}`;
     }
     if (hashtagsRepeat(hashtags[i], hashtags.slice(i + 1))) {
@@ -405,7 +405,7 @@ uploadCancel.addEventListener(`keydown`, (evt) => {
   }
 });
 
-const onPushEnter = function (evt) {
+/* const onPushEnter = function (evt) {
   if (evt.key === `Enter`) {
     if (evt.target.className === `picture`) {
       const cardImgPreview = evt.target.querySelector(`.picture__img`);
@@ -415,11 +415,10 @@ const onPushEnter = function (evt) {
       }
     }
   }
-};
+}; */
 
 document.querySelectorAll(`.picture`).forEach((elm) => {
   elm.addEventListener(`click`, modalOpenHandler);
-  elm.addEventListener(`keydown`, onPushEnter);
 });
 
 closeBigPicture.addEventListener(`click`, closeModalOpen);
