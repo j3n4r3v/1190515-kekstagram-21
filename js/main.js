@@ -1,9 +1,9 @@
 'use strict';
 
-/* const PICTURE_TEMPLATE = document.querySelector(`#picture`)
+const PICTURE_TEMPLATE = document.querySelector(`#picture`)
   .content
-  .querySelector(`.picture`); */
-// const PICTURE_CONTAINER = document.querySelector(`.pictures`);
+  .querySelector(`.picture`);
+const PICTURE_CONTAINER = document.querySelector(`.pictures`);
 const PHOTOS_AMOUNT = 25;
 const MIN_COMMENTS = 2;
 const MAX_COMMENTS = 6;
@@ -64,7 +64,7 @@ const createMockObjects = function (amount) {
   return massivePhotos;
 };
 
-/* let renderPhoto = function (photo) {
+let renderPhoto = function (photo) {
 
   const pictureElement = PICTURE_TEMPLATE.cloneNode(true);
   pictureElement.href = `#` + photo.id;
@@ -74,7 +74,7 @@ const createMockObjects = function (amount) {
   pictureElement.querySelector(`.picture__img`).alt = `${photo.description}`;
 
   return pictureElement;
-}; */
+};
 
 // 3.2
 
@@ -122,7 +122,7 @@ renderBigPicture(mockPhotos[0]);
 
 // 4.1
 const onOverlayEscPush = (evt) => {
-  if (hashtagsText === document.activeElement) {
+  if (hashtagsText === document.activeElement || commentsText === document.activeElement) {
     return;
   }
   if (evt.key === `Escape`) {
@@ -355,3 +355,71 @@ scaleDecrease.addEventListener(`click`, function () {
 scaleIncrease.addEventListener(`click`, function () {
   increaseScale();
 });
+
+// 4.2
+
+const commentsText = form.querySelector(`.text__description`);
+const photosFragment = document.createDocumentFragment();
+const massivePhotos = createMockObjects(PHOTOS_AMOUNT);
+
+for (let i = 0; i < massivePhotos.length; i++) {
+  photosFragment.append(renderPhoto(massivePhotos[i]));
+}
+PICTURE_CONTAINER.append(photosFragment);
+
+const bigPicture = document.querySelector(`.big-picture`);
+const closeBigPicture = bigPicture.querySelector(`.big-picture__cancel`);
+const socialCommentText = bigPicture.querySelector(`.social__footer-text`);
+const socialCommentCount = document.querySelector(`.social__comment-count`);
+const commentLoader = bigPicture.querySelector(`.comments-loader`);
+
+socialCommentCount.classList.add(`hidden`);
+commentLoader.classList.add(`hidden`);
+
+const onBigPictureEscPush = function (evt) {
+  if (evt.key === `Escape`) {
+    evt.preventDefault();
+    closeModalOpen();
+  }
+};
+
+const modalOpenHandler = (evt) => {
+  for (let i = 0; i < massivePhotos.length; i++) {
+    if (parseInt(evt.target.closest(`.picture`).hash.slice(1), 10) === massivePhotos[i].id) {
+      renderBigPicture(massivePhotos[i]);
+      bigPicture.classList.remove(`hidden`);
+      document.addEventListener(`keydown`, onBigPictureEscPush);
+    }
+  }
+};
+
+const closeModalOpen = () => {
+  bigPicture.classList.add(`hidden`);
+  socialCommentText.value = ``;
+  document.removeEventListener(`keydown`, onBigPictureEscPush);
+};
+
+uploadCancel.addEventListener(`keydown`, (evt) => {
+  if (evt.key === `Enter`) {
+    closeOverlay();
+  }
+});
+
+const onPushEnter = function (evt) {
+  if (evt.key === `Enter`) {
+    if (evt.target.className === `picture`) {
+      const cardImgPreview = evt.target.querySelector(`.picture__img`);
+      if (evt.keyCode === `Enter` && cardImgPreview) {
+        bigPicture.classList.remove(`hidden`);
+        document.querySelector(`body`).classList.add(`modal-open`);
+      }
+    }
+  }
+};
+
+document.querySelectorAll(`.picture`).forEach((elm) => {
+  elm.addEventListener(`click`, modalOpenHandler);
+  elm.addEventListener(`keydown`, onPushEnter);
+});
+
+closeBigPicture.addEventListener(`click`, closeModalOpen);
