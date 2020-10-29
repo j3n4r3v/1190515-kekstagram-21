@@ -291,9 +291,9 @@ const hashtagValidity = function () { // Проверяем на валидно�
   }
   for (let i = 0; i < hashtags.length; i++) {
     if (hashtags[i].length > MAX_HASHTAG_CHARACTERS) {
-      customValidityMessage = `${VALIDATION_MESSAGES.numberTag}`;
+      customValidityMessage = `${VALIDATION_MESSAGES.numberTags}`;
     }
-    if (hashtags[i].length === 1) {
+    if (hashtags[i].startsWith(`#`) && hashtags[i].length === 1) {
       customValidityMessage = `${VALIDATION_MESSAGES.hashTagStarts}`;
     }
     if (!hashtags[i].startsWith(`#`) && HASHTAG_PATTERN.test(hashtags[i]) && hashtags[i].length > 0) {
@@ -302,7 +302,7 @@ const hashtagValidity = function () { // Проверяем на валидно�
     if (!hashtags[i].startsWith(`#`) && !HASHTAG_PATTERN.test(hashtags[i])) {
       customValidityMessage = `${VALIDATION_MESSAGES.notRegularTags}`;
     }
-    if (hashtags[i].length > 1 && !HASHTAG_PATTERN.test(hashtags[i].substring(1))) {
+    if (hashtags[i].startsWith(`#`) && hashtags[i].length > 1 && !HASHTAG_PATTERN.test(hashtags[i].substring(1))) {
       customValidityMessage = `${VALIDATION_MESSAGES.regularTags}`;
     }
     if (hashtagsRepeat(hashtags[i], hashtags.slice(i + 1))) {
@@ -404,18 +404,6 @@ uploadCancel.addEventListener(`keydown`, (evt) => {
     closeOverlay();
   }
 });
-
-/* const onPushEnter = function (evt) {
-  if (evt.key === `Enter`) {
-    if (evt.target.className === `picture`) {
-      const cardImgPreview = evt.target.querySelector(`.picture__img`);
-      if (evt.keyCode === `Enter` && cardImgPreview) {
-        bigPicture.classList.remove(`hidden`);
-        document.querySelector(`body`).classList.add(`modal-open`);
-      }
-    }
-  }
-}; */
 
 document.querySelectorAll(`.picture`).forEach((elm) => {
   elm.addEventListener(`click`, modalOpenHandler);
