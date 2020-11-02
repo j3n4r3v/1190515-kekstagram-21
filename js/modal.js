@@ -25,7 +25,7 @@
 
   const modalOpenHandler = (evt) => {
     for (let i = 0; i < massivePhotos.length; i++) {
-      if (parseInt(evt.target.closest(`.picture`).hash.slice(1), 10) === massivePhotos[i].id) {
+      if ((evt.target.closest(`.picture`).id) === massivePhotos[i].id) {
         window.bigPicture.renderBigPicture(massivePhotos[i]);
         bigPicture.classList.remove(`hidden`);
         document.addEventListener(`keydown`, onBigPictureEscPush);

@@ -11,8 +11,6 @@
   const upload = document.querySelector(`#upload-file`);
   const uploadOverlay = document.querySelector(`.img-upload__overlay`);
   const uploadCancel = uploadOverlay.querySelector(`#upload-cancel`);
-  const filterScale = form.querySelector(`.img-upload__effect-level`); // Блок uзменения глубины эффекта, накладываемого на изображение
-  const pin = filterScale.querySelector(`.effect-level__pin`); // Ползунок в слайдере
   const body = document.querySelector(`body`);
   const commentsText = form.querySelector(`.text__description`);
 
@@ -57,10 +55,10 @@
   const openOverlay = function () {
     uploadOverlay.classList.remove(`hidden`);
     body.classList.add(`modal-open`);
-    filterScale.classList.add(`hidden`);
+    window.effects.filterScale.classList.add(`hidden`);
     document.addEventListener(`keydown`, onOverlayEscPush);
     window.form.hashtagsText.addEventListener(`input`, window.form.onTextHashtagsInput);
-    pin.addEventListener(`mouseup`, window.effects.effectLevelHandler);
+    window.effects.effectLevelPin.addEventListener(`mouseup`, window.effects.effectLevelHandler);
     form.addEventListener(`change`, window.effects.effectChangeHandler);
     form.addEventListener(`submit`, window.form.formSubmit);
   };
@@ -72,7 +70,7 @@
     scaleDecrease.removeEventListener(`click`, decreaseScale);
     scaleIncrease.removeEventListener(`click`, increaseScale);
     window.form.hashtagsText.removeEventListener(`input`, window.form.onTextHashtagsInput);
-    pin.removeEventListener(`mouseup`, window.effects.effectLevelHandler);
+    window.effects.effectLevelPin.removeEventListener(`mouseup`, window.effects.effectLevelHandler);
     form.removeEventListener(`change`, window.effects.effectChangeHandler);
     form.removeEventListener(`submit`, window.form.formSubmit);
     upload.value = ``;
@@ -92,7 +90,6 @@
 
   window.overlay = {
     imgPreview,
-    filterScale,
     uploadCancel,
     form,
     closeOverlay
