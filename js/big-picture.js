@@ -2,8 +2,8 @@
 (function () {
   const bigPicture = document.querySelector(`.big-picture`);
 
-  const renderBigPicture = (id) => {
-    const photo = window.load.dataArray[id];
+  const renderBigPicture = (index) => {
+    const photo = window.load.dataServerArr[index];
     bigPicture.querySelector(`.big-picture__img img`).setAttribute(`src`, `${photo.url}`);
     bigPicture.querySelector(`.likes-count`).textContent = photo.likes;
     bigPicture.querySelector(`.comments-count`).textContent = photo.comments.length;

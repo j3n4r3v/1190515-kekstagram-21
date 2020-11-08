@@ -12,9 +12,9 @@
 
   const massivePhotos = [];
 
-  let renderPhoto = function (photo) {
+  let renderPhoto = function (photo, index) {
     const pictureElement = PICTURE_TEMPLATE.cloneNode(true);
-    // pictureElement.id = ChoosenPhotoId;
+    pictureElement.querySelector(`.picture__img`).setAttribute(`id`, index);
     pictureElement.querySelector(`.picture__likes`).textContent = photo.likes;
     pictureElement.querySelector(`.picture__comments`).textContent = photo.comments.length;
     pictureElement.querySelector(`.picture__img`).src = `${photo.url}`;
@@ -25,7 +25,7 @@
   const createMockObjects = function (amount) {
     for (let i = 0; i < amount; i++) {
       massivePhotos.push({
-        // id: guide(), непонял как тут можно использовать гуид при получении данных
+        id: i, // guide(), непонял как использовать гуид, потому вернул просто индекс
         url: `photos/${i + 1}.jpg`,
         description: `Описание фотографии`,
         likes: Math.round(window.utils.getRandom(window.data.MIN_LIKES, window.data.MAX_LIKES)),

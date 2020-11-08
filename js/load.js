@@ -2,7 +2,7 @@
 
 (function () {
   const URL = `https://21.javascript.pages.academy/kekstagram/data`;
-  const TIMEOUT = 10000;
+  const TIMEOUT_IN_MS = 10000;
   const StatusCode = {
     OK: 200,
   };
@@ -18,9 +18,6 @@
       const dataServerArr = xhr.response;
       if (xhr.status === StatusCode.OK) {
         onSuccess(xhr.response);
-        for (let i = 0; i < dataServerArr.length; i++) {
-          dataArray.push(dataServerArr[i]);
-        }
       } else {
         onError(`Статус ответа` + xhr.status + ` ` + xhr.statusText);
       }
@@ -37,7 +34,7 @@
       onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
     });
 
-    xhr.timeout = TIMEOUT;
+    xhr.timeout = TIMEOUT_IN_MS;
 
     xhr.send();
 

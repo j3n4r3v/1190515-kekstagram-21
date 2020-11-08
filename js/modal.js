@@ -5,6 +5,7 @@
   const socialCommentText = bigPicture.querySelector(`.social__footer-text`);
   const socialCommentCount = document.querySelector(`.social__comment-count`);
   const commentLoader = bigPicture.querySelector(`.comments-loader`);
+  const pictures = document.querySelectorAll(`.picture`);
   // const massivePhotos = window.mock.massivePhotos;
 
   socialCommentCount.classList.add(`hidden`);
@@ -18,26 +19,25 @@
   };
 
   const indexPhoto = (picture) => {
-    const pictures = document.querySelector(`.pictures`);
-    const photoList = pictures.querySelectorAll(`.picture__img`);
+    const photoList = document.querySelectorAll(`.picture`);
     return Array.from(photoList).indexOf(picture);
   };
 
-
   const modalOpenHandler = (evt) => {
     for (let i = 0; i < window.data.PHOTOS_AMOUNT; i++) {
-      const ChoosenPhotoPicture = evt.target.closest(`.picture__img`);
-      if (ChoosenPhotoPicture) {
-        const photoId = indexPhoto(ChoosenPhotoPicture);
-        window.bigPicture.renderBigPicture(photoId);
+      const FocusPhotoIndex = evt.target.closest(`.picture__img`).id;
+      if (FocusPhotoIndex) {
+        const photoIndex = indexPhoto(FocusPhotoIndex);
+        window.bigPicture.renderBigPicture(photoIndex);
         bigPicture.classList.remove(`hidden`);
         document.addEventListener(`keydown`, onBigPictureEscPush);
       }
-      /* window.modal = {
-        ChoosenPhotoPicture
-      }; */
     }
   };
+
+  pictures.forEach((elm) => {
+    elm.addEventListener(`click`, modalOpenHandler);
+  });
 
   const closeModalOpen = () => {
     bigPicture.classList.add(`hidden`);
@@ -45,24 +45,20 @@
     document.removeEventListener(`keydown`, onBigPictureEscPush);
   };
 
+  closeBigPicture.addEventListener(`click`, closeModalOpen);
+
   window.overlay.uploadCancel.addEventListener(`keydown`, (evt) => {
     if (evt.key === window.utils.KEYDOWN.ent) {
       window.overlay.closeOverlay();
     }
   });
 
-  document.querySelectorAll(`.picture`).forEach((elm) => {
-    elm.addEventListener(`click`, modalOpenHandler);
-  });
-
-  closeBigPicture.addEventListener(`click`, closeModalOpen);
-
   // Добавил поведение в случае успеха/ошибки
 
-  const successHandler = function (array) {
+  const successHandler = function (dataServerArr) {
     const photosFragment = document.createDocumentFragment();
-    for (let i = 0; i < array.length; i++) {
-      photosFragment.append(window.mock.renderPhoto(array[i]));
+    for (let i = 0; i < dataServerArr.length; i++) {
+      photosFragment.append(window.mock.renderPhoto(dataServerArr[i], i));
     }
     window.data.PICTURE_CONTAINER.append(photosFragment);
   };
