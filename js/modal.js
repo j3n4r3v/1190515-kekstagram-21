@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-  const photosFragment = document.createDocumentFragment();
   const bigPicture = document.querySelector(`.big-picture`);
   const closeBigPicture = bigPicture.querySelector(`.big-picture__cancel`);
   const socialCommentText = bigPicture.querySelector(`.social__footer-text`);
@@ -18,22 +17,25 @@
     }
   };
 
-  const pictures = document.querySelector(`.pictures`);
   const indexPhoto = (picture) => {
-    const photoList = pictures.querySelectorAll(`.picture`);
+    const pictures = document.querySelector(`.pictures`);
+    const photoList = pictures.querySelectorAll(`.picture__img`);
     return Array.from(photoList).indexOf(picture);
   };
 
 
   const modalOpenHandler = (evt) => {
     for (let i = 0; i < window.data.PHOTOS_AMOUNT; i++) {
-      const ChoosenPhoto = evt.target.closest(`.picture`);
-      if (ChoosenPhoto) {
-        const photoId = indexPhoto(ChoosenPhoto);
+      const ChoosenPhotoPicture = evt.target.closest(`.picture__img`);
+      if (ChoosenPhotoPicture) {
+        const photoId = indexPhoto(ChoosenPhotoPicture);
         window.bigPicture.renderBigPicture(photoId);
         bigPicture.classList.remove(`hidden`);
         document.addEventListener(`keydown`, onBigPictureEscPush);
       }
+      /* window.modal = {
+        ChoosenPhotoPicture
+      }; */
     }
   };
 
@@ -58,6 +60,7 @@
   // Добавил поведение в случае успеха/ошибки
 
   const successHandler = function (array) {
+    const photosFragment = document.createDocumentFragment();
     for (let i = 0; i < array.length; i++) {
       photosFragment.append(window.mock.renderPhoto(array[i]));
     }

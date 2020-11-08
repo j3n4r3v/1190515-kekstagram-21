@@ -3,7 +3,7 @@
   const bigPicture = document.querySelector(`.big-picture`);
 
   const renderBigPicture = (id) => {
-    const photo = window.load.dataServerArr[id];
+    const photo = window.load.dataArray[id];
     bigPicture.querySelector(`.big-picture__img img`).setAttribute(`src`, `${photo.url}`);
     bigPicture.querySelector(`.likes-count`).textContent = photo.likes;
     bigPicture.querySelector(`.comments-count`).textContent = photo.comments.length;

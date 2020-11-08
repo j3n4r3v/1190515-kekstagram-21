@@ -14,7 +14,7 @@
 
   let renderPhoto = function (photo) {
     const pictureElement = PICTURE_TEMPLATE.cloneNode(true);
-    // pictureElement.setAttribute(`id`, photo.id); непонял как тут можно использовать айди при получении данных
+    // pictureElement.id = ChoosenPhotoId;
     pictureElement.querySelector(`.picture__likes`).textContent = photo.likes;
     pictureElement.querySelector(`.picture__comments`).textContent = photo.comments.length;
     pictureElement.querySelector(`.picture__img`).src = `${photo.url}`;
