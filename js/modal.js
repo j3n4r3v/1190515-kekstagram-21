@@ -25,9 +25,9 @@
 
   const modalOpenHandler = (evt) => {
     for (let i = 0; i < window.data.PHOTOS_AMOUNT; i++) {
-      const FocusPhotoIndex = evt.target.closest(`.picture__img`).id;
-      if (FocusPhotoIndex) {
-        const photoIndex = indexPhoto(FocusPhotoIndex);
+      const focusPhotoIndex = evt.target.closest(`.picture__img`).id;
+      if (focusPhotoIndex) {
+        const photoIndex = indexPhoto(focusPhotoIndex);
         window.bigPicture.renderBigPicture(photoIndex);
         bigPicture.classList.remove(`hidden`);
         document.addEventListener(`keydown`, onBigPictureEscPush);
@@ -55,10 +55,10 @@
 
   // Добавил поведение в случае успеха/ошибки
 
-  const successHandler = function (dataServerArr) {
+  const successHandler = function (response) {
     const photosFragment = document.createDocumentFragment();
-    for (let i = 0; i < dataServerArr.length; i++) {
-      photosFragment.append(window.mock.renderPhoto(dataServerArr[i], i));
+    for (let i = 0; i < response.length; i++) {
+      photosFragment.append(window.mock.renderPhoto(response[i], i));
     }
     window.data.PICTURE_CONTAINER.append(photosFragment);
   };

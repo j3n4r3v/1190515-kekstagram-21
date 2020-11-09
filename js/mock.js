@@ -21,7 +21,7 @@
     pictureElement.querySelector(`.picture__img`).alt = `${photo.description}`;
     return pictureElement;
   };
-
+  /*
   const createMockObjects = function (amount) {
     for (let i = 0; i < amount; i++) {
       massivePhotos.push({
@@ -34,11 +34,11 @@
     }
     return massivePhotos;
   };
-
+*/
   window.mock = {
     massivePhotos,
     renderPhoto,
-    createMockObjects
+    // createMockObjects
   };
 
 })();
