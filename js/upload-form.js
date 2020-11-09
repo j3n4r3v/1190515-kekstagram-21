@@ -9,48 +9,48 @@
 
   const onUploadSuccess = () => {
     const successTemplate = uploadSuccess.cloneNode(true);
-    createFragment.appendChild(successTemplate);
-    mainNode.appendChild(createFragment);
-    document.addEventListener(`click`, removeWindowSuccessUpload);
-    document.addEventListener(`keydown`, onWindowSuccessMessageButtonEscape);
+    createFragment.append(successTemplate);
+    mainNode.append(createFragment);
+    document.addEventListener(`click`, removeSuccessUpload);
+    document.addEventListener(`keydown`, onSuccessMessageEscape);
   };
 
-  const removeWindowSuccessUpload = () => {
+  const removeSuccessUpload = () => {
     document.querySelector(`.success`).remove();
-    document.removeEventListener(`click`, removeWindowSuccessUpload);
-    document.removeEventListener(`keydown`, onWindowSuccessMessageButtonEscape);
+    document.removeEventListener(`click`, removeSuccessUpload);
+    document.removeEventListener(`keydown`, onSuccessMessageEscape);
   };
 
   const onUploadError = () => {
     const errorTemplate = uploadError.cloneNode(true);
-    createFragment.appendChild(errorTemplate);
-    mainNode.appendChild(createFragment);
-    document.addEventListener(`click`, removeWindowErrorUpload);
-    document.addEventListener(`keydown`, onWindowErrorMessageButtonEscape);
+    createFragment.append(errorTemplate);
+    mainNode.append(createFragment);
+    document.addEventListener(`click`, removeErrorUpload);
+    document.addEventListener(`keydown`, onErrorMessageEscape);
   };
 
-  const removeWindowErrorUpload = () => {
+  const removeErrorUpload = () => {
     document.querySelector(`.error`).remove();
-    document.removeEventListener(`click`, removeWindowErrorUpload);
-    document.removeEventListener(`keydown`, onWindowErrorMessageButtonEscape);
+    document.removeEventListener(`click`, removeErrorUpload);
+    document.removeEventListener(`keydown`, onErrorMessageEscape);
   };
 
-  const onWindowSuccessMessageButtonEscape = (evt) => {
-    if (evt.keyCode === window.utils.KEYDOWN.esc) {
-      removeWindowSuccessUpload();
+  const onSuccessMessageEscape = (evt) => {
+    if (evt.key === window.utils.KEYDOWN.esc) {
+      removeSuccessUpload();
     }
   };
 
-  const onWindowErrorMessageButtonEscape = (evt) => {
-    if (evt.keyCode === window.utils.KEYDOWN.esc) {
-      removeWindowErrorUpload();
+  const onErrorMessageEscape = (evt) => {
+    if (evt.key === window.utils.KEYDOWN.esc) {
+      removeErrorUpload();
     }
   };
 
   const submitHundler = (evt) => {
     evt.preventDefault();
     window.upload(new FormData(form), onUploadSuccess, onUploadError);
-    window.effects.closeEditWindow();
+    window.overlay.closeOverlay();
   };
 
   form.addEventListener(`submit`, submitHundler);

@@ -6,7 +6,6 @@
   const StatusCode = {
     OK: 200,
   };
-  let dataArray = [];
 
   window.load = function (onSuccess, onError) {
     const xhr = new XMLHttpRequest();
@@ -15,16 +14,11 @@
     xhr.open(`GET`, URL);
 
     xhr.addEventListener(`load`, function () {
-      const dataServerArr = xhr.response;
       if (xhr.status === StatusCode.OK) {
         onSuccess(xhr.response);
       } else {
         onError(`Статус ответа` + xhr.status + ` ` + xhr.statusText);
       }
-      window.load = {
-        dataServerArr,
-        dataArray
-      };
     });
 
     xhr.addEventListener(`error`, function () {
