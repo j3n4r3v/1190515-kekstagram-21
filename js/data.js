@@ -40,8 +40,14 @@
     return comments;
   };
 
+  /* const onSuccess = function (response) {
+    const dataServerArr = response;
+    return dataServerArr;
+  }; */
 
   window.data = {
+    /* onSuccess,
+    dataServerArr, */
     PICTURE_CONTAINER,
     PHOTOS_AMOUNT,
     generateComments,

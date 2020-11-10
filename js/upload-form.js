@@ -12,13 +12,13 @@
     createFragment.append(successTemplate);
     mainNode.append(createFragment);
     document.addEventListener(`click`, removeSuccessUpload);
-    document.addEventListener(`keydown`, onSuccessMessageEscape);
+    document.addEventListener(`keydown`, onSuccessMessageEsc);
   };
 
   const removeSuccessUpload = () => {
     document.querySelector(`.success`).remove();
     document.removeEventListener(`click`, removeSuccessUpload);
-    document.removeEventListener(`keydown`, onSuccessMessageEscape);
+    document.removeEventListener(`keydown`, onSuccessMessageEsc);
   };
 
   const onUploadError = () => {
@@ -26,22 +26,22 @@
     createFragment.append(errorTemplate);
     mainNode.append(createFragment);
     document.addEventListener(`click`, removeErrorUpload);
-    document.addEventListener(`keydown`, onErrorMessageEscape);
+    document.addEventListener(`keydown`, onErrorMessageEsc);
   };
 
   const removeErrorUpload = () => {
     document.querySelector(`.error`).remove();
     document.removeEventListener(`click`, removeErrorUpload);
-    document.removeEventListener(`keydown`, onErrorMessageEscape);
+    document.removeEventListener(`keydown`, onErrorMessageEsc);
   };
 
-  const onSuccessMessageEscape = (evt) => {
+  const onSuccessMessageEsc = (evt) => {
     if (evt.key === window.utils.KEYDOWN.esc) {
       removeSuccessUpload();
     }
   };
 
-  const onErrorMessageEscape = (evt) => {
+  const onErrorMessageEsc = (evt) => {
     if (evt.key === window.utils.KEYDOWN.esc) {
       removeErrorUpload();
     }

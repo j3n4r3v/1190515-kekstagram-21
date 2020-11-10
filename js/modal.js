@@ -5,8 +5,7 @@
   const socialCommentText = bigPicture.querySelector(`.social__footer-text`);
   const socialCommentCount = document.querySelector(`.social__comment-count`);
   const commentLoader = bigPicture.querySelector(`.comments-loader`);
-  const pictures = document.querySelectorAll(`.picture`);
-  // const massivePhotos = window.mock.massivePhotos;
+  const pictures = document.querySelectorAll(`.picture__img`);
 
   socialCommentCount.classList.add(`hidden`);
   commentLoader.classList.add(`hidden`);
@@ -19,16 +18,16 @@
   };
 
   const indexPhoto = (picture) => {
-    const photoList = document.querySelectorAll(`.picture`);
+    const photoList = pictures;
     return Array.from(photoList).indexOf(picture);
   };
 
   const modalOpenHandler = (evt) => {
     for (let i = 0; i < window.data.PHOTOS_AMOUNT; i++) {
-      const focusPhotoIndex = evt.target.closest(`.picture__img`).id;
-      if (focusPhotoIndex) {
-        const photoIndex = indexPhoto(focusPhotoIndex);
-        window.bigPicture.renderBigPicture(photoIndex);
+      const evtTarget = evt.target.classList.contains(`.picture__img`);
+      if (evtTarget) {
+        const currentIndex = indexPhoto(evtTarget);
+        window.bigPicture.renderBigPicture(currentIndex);
         bigPicture.classList.remove(`hidden`);
         document.addEventListener(`keydown`, onBigPictureEscPush);
       }
@@ -56,20 +55,21 @@
   // Добавил поведение в случае успеха/ошибки
 
   const successHandler = function (response) {
+    const dataServerArr = response;
     const photosFragment = document.createDocumentFragment();
-    for (let i = 0; i < response.length; i++) {
-      photosFragment.append(window.mock.renderPhoto(response[i], i));
+    for (let i = 0; i < dataServerArr.length; i++) {
+      photosFragment.append(window.mock.renderPhoto(dataServerArr[i], i));
     }
     window.data.PICTURE_CONTAINER.append(photosFragment);
   };
 
   const errorHandler = function (errorMessage) {
     const node = document.createElement(`div`);
-    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
+    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: green;`;
     node.style.position = `absolute`;
     node.style.left = 0;
     node.style.right = 0;
-    node.style.fontSize = `30px`;
+    node.style.fontSize = `50px`;
     node.textContent = errorMessage;
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
