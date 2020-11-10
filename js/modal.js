@@ -61,6 +61,9 @@
       photosFragment.append(window.mock.renderPhoto(dataServerArr[i], i));
     }
     window.data.PICTURE_CONTAINER.append(photosFragment);
+    window.modal = {
+      dataServerArr
+    };
   };
 
   const errorHandler = function (errorMessage) {
