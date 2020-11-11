@@ -1,14 +1,28 @@
 'use strict';
 (function () {
   const successHandler = function (response) {
-    window.xhrResponse = response;
+    const xhrResponse = response;
+    const xhrResponseNewArr = response.map((item) => {
+      item.id = window.mock.guid();
+      return item;
+    });
+    // eslint-disable-next-line no-console
+    console.log(`xhrResponseNewArr`, xhrResponseNewArr);
+
     const photosFragment = document.createDocumentFragment();
-    for (let i = 0; i < window.xhrResponse.length; i++) {
-      photosFragment.append(window.mock.renderPhoto(window.xhrResponse[i]));
+    for (let i = 0; i < xhrResponse.length; i++) {
+      photosFragment.append(window.mock.renderPhoto(xhrResponse[i]));
     }
     window.data.PICTURE_CONTAINER.append(photosFragment);
+
+    const picturesContainer = document.querySelector(`.pictures`);
+    const picturesCollection = picturesContainer.querySelectorAll(`.picture`);
+    picturesCollection.forEach((photo) => {
+      photo.addEventListener(`click`, window.modal.modalOpenHandler);
+    });
     window.main = {
-      response
+      xhrResponseNewArr,
+      xhrResponse
     };
   };
 
