@@ -2,15 +2,14 @@
 (function () {
   const bigPicture = document.querySelector(`.big-picture`);
 
-  const renderBigPicture = (currentIndex) => {
-    const photo = window.modal.dataServerArr[currentIndex];
-    bigPicture.querySelector(`.big-picture__img img`).setAttribute(`src`, `${photo.url}`);
-    bigPicture.querySelector(`.likes-count`).textContent = photo.likes;
-    bigPicture.querySelector(`.comments-count`).textContent = photo.comments.length;
-    bigPicture.querySelector(`.social__caption`).textContent = photo.description;
+  const renderBigPicture = (currentPhoto) => {
+    bigPicture.querySelector(`.big-picture__img img`).setAttribute(`src`, `${currentPhoto.url}`);
+    bigPicture.querySelector(`.likes-count`).textContent = currentPhoto.likes;
+    bigPicture.querySelector(`.comments-count`).textContent = currentPhoto.comments.length;
+    bigPicture.querySelector(`.social__caption`).textContent = currentPhoto.description;
 
     bigPicture.querySelector(`.social__comments`).innerHTML = ``;
-    renderBigPictureComments(photo.comments, bigPicture.querySelector(`.social__comments`));
+    renderBigPictureComments(currentPhoto.comments, bigPicture.querySelector(`.social__comments`));
 
     const socialCommentCount = document.querySelector(`.social__comment-count`);
     socialCommentCount.classList.add(`hidden`);
