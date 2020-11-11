@@ -40,7 +40,6 @@
     return comments;
   };
 
-
   window.data = {
     PICTURE_CONTAINER,
     PHOTOS_AMOUNT,

@@ -5,8 +5,8 @@
   const socialCommentText = bigPicture.querySelector(`.social__footer-text`);
   const socialCommentCount = document.querySelector(`.social__comment-count`);
   const commentLoader = bigPicture.querySelector(`.comments-loader`);
-  const pictures = document.querySelectorAll(`.picture`);
-  // const massivePhotos = window.mock.massivePhotos;
+  const picturesContainer = document.querySelector(`.pictures`);
+  const picturesCollection = picturesContainer.querySelectorAll(`.picture > .picture__img`);
 
   socialCommentCount.classList.add(`hidden`);
   commentLoader.classList.add(`hidden`);
@@ -18,25 +18,25 @@
     }
   };
 
-  const indexPhoto = (picture) => {
-    const photoList = document.querySelectorAll(`.picture`);
-    return Array.from(photoList).indexOf(picture);
+  const fromArrayPhoto = (photoId) => {
+    const photoList = picturesCollection;
+    return Array.from(photoList).indexOf(photoId);
   };
 
-  const modalOpenHandler = (evt) => {
+  const modalOpenHandler = (selectedPicture) => {
     for (let i = 0; i < window.data.PHOTOS_AMOUNT; i++) {
-      const FocusPhotoIndex = evt.target.closest(`.picture__img`).id;
-      if (FocusPhotoIndex) {
-        const photoIndex = indexPhoto(FocusPhotoIndex);
-        window.bigPicture.renderBigPicture(photoIndex);
+      const evtTarget = selectedPicture.target.classList.contains(`.picture__img`).id;
+      if (evtTarget) {
+        const currentPhoto = fromArrayPhoto(evtTarget);
+        window.bigPicture.renderBigPicture(currentPhoto);
         bigPicture.classList.remove(`hidden`);
         document.addEventListener(`keydown`, onBigPictureEscPush);
       }
     }
   };
 
-  pictures.forEach((elm) => {
-    elm.addEventListener(`click`, modalOpenHandler);
+  picturesCollection.forEach((photo) => {
+    photo.addEventListener(`click`, modalOpenHandler);
   });
 
   const closeModalOpen = () => {
@@ -52,28 +52,5 @@
       window.overlay.closeOverlay();
     }
   });
-
-  // Добавил поведение в случае успеха/ошибки
-
-  const successHandler = function (dataServerArr) {
-    const photosFragment = document.createDocumentFragment();
-    for (let i = 0; i < dataServerArr.length; i++) {
-      photosFragment.append(window.mock.renderPhoto(dataServerArr[i], i));
-    }
-    window.data.PICTURE_CONTAINER.append(photosFragment);
-  };
-
-  const errorHandler = function (errorMessage) {
-    const node = document.createElement(`div`);
-    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
-    node.style.position = `absolute`;
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = `30px`;
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement(`afterbegin`, node);
-  };
-
-  window.load(successHandler, errorHandler);
 
 })();
