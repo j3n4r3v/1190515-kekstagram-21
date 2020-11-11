@@ -2,16 +2,16 @@
 (function () {
   const successHandler = function (response) {
     const xhrResponse = response;
-    const xhrResponseNewArr = response.map((item) => {
-      item.id = window.mock.guid();
+    const xhrResponseNewArr = response.map((item, index) => {
+      item.id = index;
       return item;
     });
     // eslint-disable-next-line no-console
     console.log(`xhrResponseNewArr`, xhrResponseNewArr);
 
     const photosFragment = document.createDocumentFragment();
-    for (let i = 0; i < xhrResponse.length; i++) {
-      photosFragment.append(window.mock.renderPhoto(xhrResponse[i]));
+    for (let i = 0; i < xhrResponseNewArr.length; i++) {
+      photosFragment.append(window.mock.renderPhoto(xhrResponseNewArr[i], i));
     }
     window.data.PICTURE_CONTAINER.append(photosFragment);
 

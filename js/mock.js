@@ -11,9 +11,9 @@
     });
   };
 
-  let renderPhoto = function (photo) {
+  let renderPhoto = function (photo, index) {
     const pictureElement = PICTURE_TEMPLATE.cloneNode(true);
-    pictureElement.querySelector(`.picture__img`).setAttribute(`id`, guid());
+    pictureElement.querySelector(`.picture__img`).setAttribute(`id`, index);
     pictureElement.querySelector(`.picture__likes`).textContent = photo.likes;
     pictureElement.querySelector(`.picture__comments`).textContent = photo.comments.length;
     pictureElement.querySelector(`.picture__img`).src = `${photo.url}`;
