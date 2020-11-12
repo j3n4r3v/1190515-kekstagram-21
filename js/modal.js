@@ -16,7 +16,7 @@
     }
   };
 
-  const modalOpenHandler = (evt) => {
+  /* const modalOpenHandler = (evt) => {
     const targetId = parseInt(evt.target.closest(`.picture__img`).id, 10);
     const targetObject = window.main.xhrResponseNewArr.find((item) =>
       item.id === targetId);
@@ -24,6 +24,18 @@
       window.bigPicture.renderBigPicture(targetObject);
       bigPicture.classList.remove(`hidden`);
       document.addEventListener(`keydown`, onBigPictureEscPush);
+    }
+  }; */
+
+  const modalOpenHandler = (evt) => {
+    for (let i = 0; i < window.main.xhrResponseNewArr.length; i++) {
+      const targetId = parseInt(evt.target.closest(`.picture__img`).id, 10);
+      const targetObject = window.main.xhrResponseNewArr[i].id;
+      if (targetId === targetObject) {
+        window.bigPicture.renderBigPicture(window.main.xhrResponseNewArr[i]);
+        bigPicture.classList.remove(`hidden`);
+        document.addEventListener(`keydown`, onBigPictureEscPush);
+      }
     }
   };
 
