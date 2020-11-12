@@ -5,6 +5,9 @@
   const socialCommentText = bigPicture.querySelector(`.social__footer-text`);
   const socialCommentCount = document.querySelector(`.social__comment-count`);
   const commentLoader = bigPicture.querySelector(`.comments-loader`);
+  const containerPictures = document.querySelector(`.pictures`);
+  const imgFilters = document.querySelector(`.img-filters`);
+
 
   socialCommentCount.classList.add(`hidden`);
   commentLoader.classList.add(`hidden`);
@@ -13,12 +16,6 @@
     if (evt.key === window.utils.KEYDOWN.esc) {
       evt.preventDefault();
       closeModalOpen();
-    }
-  };
-
-  const onBigPictureEntPush = function (evt) {
-    if (evt.key === window.utils.KEYDOWN.ent) {
-      modalOpenHandler();
     }
   };
 
@@ -56,28 +53,43 @@
     return xhrResponseNewArr;
   };
 
-  const addUsersPictures = function (pictures) {
+  const addServerPictures = function (pictures) {
     const photosFragment = document.createDocumentFragment();
     for (let i = 0; i < pictures.length; i++) {
       photosFragment.append(window.mock.renderPhoto(pictures[i], i));
     }
     window.data.PICTURE_CONTAINER.append(photosFragment);
   };
+
+  const removeUsersPictures = function () {
+    const shownPictures = document.querySelectorAll(`.picture`);
+
+    shownPictures.forEach(function (picture) {
+      containerPictures.removeChild(picture);
+    });
+  };
+
+  const onBigPictureEntPush = function (evt) {
+    if (evt.key === window.utils.KEYDOWN.ent) {
+      modalOpenHandler();
+    }
+  };
+
   const successHandler = function (response) {
     const picturesList = createPicturesArray(response);
-    addUsersPictures(picturesList);
+    addServerPictures(picturesList);
 
-
-    document.querySelectorAll(`.picture`).forEach((elm) => {
+    document.querySelectorAll(`.picture__img`).forEach((elm) => {
       elm.addEventListener(`click`, modalOpenHandler);
       elm.addEventListener(`keydown`, onBigPictureEntPush);
+
+      imgFilters.classList.remove(`img-filters--inactive`);
     });
 
     window.modal = {
       picturesList
     };
   };
-
 
   const errorHandler = function (errorMessage) {
     const node = document.createElement(`div`);
@@ -94,7 +106,8 @@
 
   window.modal = {
     modalOpenHandler,
-    addUsersPictures
+    addServerPictures,
+    removeUsersPictures
   };
 
 })();
