@@ -3,7 +3,7 @@
   const MAX_RANDOM_ELEMENTS_AMOUNT = 10;
 
   const removeUsersPictures = window.modal.removeUsersPictures;
-  const addUsersPictures = window.modal.addUsersPictures;
+  const addServerPictures = window.modal.addServerPictures;
 
   const imgFilters = document.querySelector(`.img-filters`);
   const filterDefault = imgFilters.querySelector(`#filter-default`);
@@ -18,7 +18,7 @@
   };
 
   const showDefaultPictures = function () {
-    addUsersPictures(window.modal.picturesList);
+    addServerPictures(window.modal.picturesList);
   };
 
   const shuffleArr = function (array) {
@@ -39,7 +39,7 @@
     const picturesList = window.modal.picturesList;
     const randomElements = shuffleArr(picturesList).slice(0, MAX_RANDOM_ELEMENTS_AMOUNT);
 
-    addUsersPictures(randomElements);
+    addServerPictures(randomElements);
   };
 
   const showDiscussedPictures = function () {
@@ -48,7 +48,7 @@
       return first.comments.length - second.comments.length;
     });
 
-    addUsersPictures(sortedList);
+    addServerPictures(sortedList);
   };
 
   const imgFiltersClickHandler = window.debounce(function (evt) {
