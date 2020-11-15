@@ -3,7 +3,7 @@
   const bigPicture = document.querySelector(`.big-picture`);
   const closeBigPicture = bigPicture.querySelector(`.big-picture__cancel`);
   const socialCommentText = bigPicture.querySelector(`.social__footer-text`);
-  const containerPictures = document.querySelector(`.pictures`);
+
   const imgFilters = document.querySelector(`.img-filters`);
   const uploadCancel = window.overlay.uploadCancel;
   const closeOverlay = window.overlay.closeOverlay;
@@ -46,12 +46,7 @@
     });
   };
 
-  const removeUsersPictures = function () {
-    const shownPictures = containerPictures.querySelectorAll(`.picture`);
-    shownPictures.forEach(function (picture) {
-      containerPictures.removeChild(picture);
-    });
-  };
+
 
   const addListeners = () => {
     document.querySelectorAll(`.picture`).forEach((elm) => {
@@ -90,7 +85,6 @@
 
   window.modal = {
     modalOpenHandler,
-    removeUsersPictures,
     addListeners
   };
 

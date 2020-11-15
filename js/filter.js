@@ -2,8 +2,8 @@
 (function () {
   const MAX_RANDOM_ELEMENTS_AMOUNT = 10;
 
-  const removeUsersPictures = window.modal.removeUsersPictures;
-  const addServerPictures = window.modal.addServerPictures;
+  const removeUsersPictures = window.gallery.removeUsersPictures;
+  const addServerPictures = window.gallery.addServerPictures;
   const addListeners = window.modal.addListeners;
 
   const imgFilters = document.querySelector(`.img-filters`);
