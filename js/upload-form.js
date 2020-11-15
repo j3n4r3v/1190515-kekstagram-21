@@ -49,7 +49,7 @@
 
   const submitHundler = (evt) => {
     evt.preventDefault();
-    window.upload(new FormData(form), onUploadSuccess, onUploadError);
+    window.server.upload(new FormData(form), onUploadSuccess, onUploadError);
     window.overlay.closeOverlay();
   };
 
