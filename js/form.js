@@ -26,7 +26,7 @@
     return false;
   };
 
-  const hashtagValidity = function () { // Проверяем на валидность введенный хештег
+  const hashtagValidity = function () {
     let customValidityMessage = ``;
     const hashes = hashtagsText.value.toLowerCase().trim();
     const hashtags = hashes.split(` `);

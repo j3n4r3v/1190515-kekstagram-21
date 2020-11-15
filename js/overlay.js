@@ -3,11 +3,11 @@
   const STEP = 25;
   const MIN_SCALE = STEP;
   const MAX_SCALE = 100;
-  const scaleDecrease = document.querySelector(`.scale__control--smaller`); // Уменьшить размер изображения
-  const scaleIncrease = document.querySelector(`.scale__control--bigger`); //  Увеличить размера изображения
-  const scaleValue = document.querySelector(`.scale__control--value`); // Величина изображения
-  const form = document.querySelector(`.img-upload__form`); // Форма для отправки данных
-  const imgPreview = form.querySelector(`.img-upload__preview img`); // Предварительный просмотр изображения - маленькое фото
+  const scaleDecrease = document.querySelector(`.scale__control--smaller`);
+  const scaleIncrease = document.querySelector(`.scale__control--bigger`);
+  const scaleValue = document.querySelector(`.scale__control--value`);
+  const form = document.querySelector(`.img-upload__form`);
+  const imgPreview = form.querySelector(`.img-upload__preview img`);
   const upload = document.querySelector(`#upload-file`);
   const uploadOverlay = document.querySelector(`.img-upload__overlay`);
   const uploadCancel = uploadOverlay.querySelector(`#upload-cancel`);
@@ -78,6 +78,7 @@
     imgPreview.style.filter = ``;
     imgPreview.className = ``;
     window.form.hashtagsText.value = ``;
+    window.overlay.form.reset(); // const form = document.querySelector(`.img-upload__form`);
   };
 
   upload.addEventListener(`change`, function () {
