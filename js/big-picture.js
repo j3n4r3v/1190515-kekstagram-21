@@ -47,6 +47,10 @@
     };
 
     commentsLoader.addEventListener(`click`, moreLoadComments);
+
+    window.bigPicture = {
+      moreLoadComments
+    };
   };
 
   const hiddenComment = () => {
@@ -74,7 +78,9 @@
   };
 
   window.bigPicture = {
-    renderBigPicture
+    renderBigPicture,
+    bigPicture,
+    commentsLoader
   };
 
 })();

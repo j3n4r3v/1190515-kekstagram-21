@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-  const modalOpenHandler = window.modal.modalOpenHandler;
   const imgFilters = document.querySelector(`.img-filters`);
 
   const guid = () => {
@@ -8,13 +7,6 @@
       const r = Math.random() * 16 | 0; const v = c === `x` ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
-  };
-
-  const addListeners = () => {
-    document.querySelectorAll(`.picture`).forEach((elm) => {
-      elm.addEventListener(`click`, modalOpenHandler);
-    });
-    imgFilters.classList.remove(`img-filters--inactive`);
   };
 
   const successHandler = function (response) {
@@ -25,7 +17,7 @@
     });
 
     window.gallery.addServerPictures(picturesList);
-    addListeners();
+    imgFilters.classList.remove(`img-filters--inactive`);
 
     window.main = {
       picturesList
@@ -44,7 +36,6 @@
   };
 
   window.main = {
-    addListeners,
     imgFilters
   };
 

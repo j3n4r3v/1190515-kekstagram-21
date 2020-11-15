@@ -78,7 +78,7 @@
     imgPreview.style.filter = ``;
     imgPreview.className = ``;
     window.form.hashtagsText.value = ``;
-    // window.overlay.form.reset();
+    window.overlay.form.reset();
   };
 
   upload.addEventListener(`change`, function () {
@@ -93,7 +93,8 @@
     imgPreview,
     uploadCancel,
     form,
-    closeOverlay
+    closeOverlay,
+    body
   };
 
 })();
