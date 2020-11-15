@@ -1,7 +1,6 @@
 'use strict';
 (function () {
   const modalOpenHandler = window.modal.modalOpenHandler;
-
   const imgFilters = document.querySelector(`.img-filters`);
 
   const guid = () => {
@@ -44,10 +43,11 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  window.server.load(successHandler, errorHandler);
-
   window.main = {
-    addListeners
+    addListeners,
+    imgFilters
   };
+
+  window.server.load(successHandler, errorHandler);
 
 })();

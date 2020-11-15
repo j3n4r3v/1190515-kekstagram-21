@@ -4,9 +4,9 @@
 
   const removeUsersPictures = window.gallery.removeUsersPictures;
   const addServerPictures = window.gallery.addServerPictures;
-  const addListeners = window.modal.addListeners;
+  const addListeners = window.main.addListeners;
+  const imgFilters = window.main.imgFilters;
 
-  const imgFilters = document.querySelector(`.img-filters`);
   const filterDefault = imgFilters.querySelector(`#filter-default`);
   const filterRandom = imgFilters.querySelector(`#filter-random`);
   const filterDiscussed = imgFilters.querySelector(`#filter-discussed`);
@@ -19,7 +19,8 @@
   };
 
   const showDefaultPictures = function () {
-    addServerPictures(window.modal.picturesList);
+
+    addServerPictures(window.main.picturesList);
     addListeners();
   };
 
@@ -38,15 +39,14 @@
   };
 
   const showRandomPictures = function () {
-    const picturesList = window.modal.picturesList;
-    const randomElements = shuffleArr(picturesList).slice(0, MAX_RANDOM_ELEMENTS_AMOUNT);
+    const randomElements = shuffleArr(window.main.picturesList).slice(0, MAX_RANDOM_ELEMENTS_AMOUNT);
 
     addServerPictures(randomElements);
     addListeners();
   };
 
   const showDiscussedPictures = function () {
-    const picturesListCopy = window.modal.picturesList.slice();
+    const picturesListCopy = window.main.picturesList.slice();
     const sortedList = picturesListCopy.sort(function (second, first) {
       return first.comments.length - second.comments.length;
     });

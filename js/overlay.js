@@ -78,7 +78,7 @@
     imgPreview.style.filter = ``;
     imgPreview.className = ``;
     window.form.hashtagsText.value = ``;
-    window.overlay.form.reset(); // const form = document.querySelector(`.img-upload__form`);
+    // window.overlay.form.reset();
   };
 
   upload.addEventListener(`change`, function () {
