@@ -3,17 +3,11 @@
   const bigPicture = document.querySelector(`.big-picture`);
   const closeBigPicture = bigPicture.querySelector(`.big-picture__cancel`);
   const socialCommentText = bigPicture.querySelector(`.social__footer-text`);
-  const commentLoader = bigPicture.querySelector(`.comments-loader`);
-  const socialCommentCount = document.querySelector(`.social__comment-count`);
   const containerPictures = document.querySelector(`.pictures`);
   const imgFilters = document.querySelector(`.img-filters`);
   const uploadCancel = window.overlay.uploadCancel;
   const closeOverlay = window.overlay.closeOverlay;
-  // const getComments = window.bigPicture.getComments;
-  // const commentsLoader = window.bigPicture.commentsLoader;
 
-  socialCommentCount.classList.add(`hidden`);
-  commentLoader.classList.add(`hidden`);
 
   const onBigPictureEscPush = function (evt) {
     if (evt.key === window.utils.KEYDOWN.esc) {
@@ -28,7 +22,6 @@
       item.id === targetId);
     window.bigPicture.renderBigPicture(targetObject);
     bigPicture.classList.remove(`hidden`);
-    // commentsLoader.addEventListener(`click`, getComments);
     document.addEventListener(`keydown`, onBigPictureEscPush);
   };
 
@@ -53,14 +46,6 @@
     });
   };
 
-  const addServerPictures = function (pictures) {
-    const photosFragment = document.createDocumentFragment();
-    for (let i = 0; i < pictures.length; i++) {
-      photosFragment.appendChild(window.mock.renderPhoto(pictures[i]));
-    }
-    window.data.PICTURE_CONTAINER.appendChild(photosFragment);
-  };
-
   const removeUsersPictures = function () {
     const shownPictures = containerPictures.querySelectorAll(`.picture`);
     shownPictures.forEach(function (picture) {
@@ -82,14 +67,13 @@
       return photo;
     });
 
-    addServerPictures(picturesList);
+    window.gallery.addServerPictures(picturesList);
     addListeners();
 
     window.modal = {
       picturesList
     };
   };
-
 
   const errorHandler = function (errorMessage) {
     const node = document.createElement(`div`);
@@ -106,7 +90,6 @@
 
   window.modal = {
     modalOpenHandler,
-    addServerPictures,
     removeUsersPictures,
     addListeners
   };

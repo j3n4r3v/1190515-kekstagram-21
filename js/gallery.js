@@ -14,8 +14,17 @@
     return pictureElement;
   };
 
-  window.mock = {
-    renderPhoto
+  const addServerPictures = function (pictures) {
+    const photosFragment = document.createDocumentFragment();
+    for (let i = 0; i < pictures.length; i++) {
+      photosFragment.appendChild(renderPhoto(pictures[i]));
+    }
+    window.data.PICTURE_CONTAINER.appendChild(photosFragment);
+  };
+
+  window.gallery = {
+    renderPhoto,
+    addServerPictures
   };
 
 })();
