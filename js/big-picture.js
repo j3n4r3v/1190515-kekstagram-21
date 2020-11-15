@@ -12,7 +12,7 @@
     bigPicture.querySelector(`.social__caption`).textContent = currentPhoto.description;
     bigPicture.querySelector(`.social__comments`).innerHTML = ``;
     renderBigPictureComments(currentPhoto.comments, socialComments);
-
+    hiddenComment();
     // commentsLoader.classList.remove(`hidden`);
     // const body = document.querySelector(`body`);
     // body.classList.add(`modal-open`);
@@ -29,12 +29,12 @@
     const allComments = socialComments.querySelectorAll(`.social__comment`);
     let countShowComment = 5;
 
-    const moreComments = (quantity, array, newArray) => {
-      if (quantity < array.length) {
+    const moreComments = (quantity, serverArray, newArray) => {
+      if (quantity < serverArray.length) {
         showComments(quantity, newArray);
         commentsLoader.classList.remove(`hidden`);
       } else {
-        showComments(array.length, newArray);
+        showComments(serverArray.length, newArray);
         commentsLoader.classList.add(`hidden`);
       }
     };
@@ -53,8 +53,6 @@
     document.querySelector(`.social__comment-count`).classList.add(`hidden`);
   };
 
-  hiddenComment();
-
   const renderBigPictureComments = (comments, container) => {
     comments.forEach((comment) => {
       const commentListItem = document.createElement(`li`);
@@ -71,6 +69,7 @@
       commentListItem.appendChild(commentImage);
       commentListItem.appendChild(commentText);
       container.appendChild(commentListItem);
+      commentListItem.classList.add(`hidden`);
     });
   };
 
