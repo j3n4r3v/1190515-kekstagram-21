@@ -4,6 +4,7 @@
 
   const removeUsersPictures = window.modal.removeUsersPictures;
   const addServerPictures = window.modal.addServerPictures;
+  const addListeners = window.modal.addListeners;
 
   const imgFilters = document.querySelector(`.img-filters`);
   const filterDefault = imgFilters.querySelector(`#filter-default`);
@@ -19,6 +20,7 @@
 
   const showDefaultPictures = function () {
     addServerPictures(window.modal.picturesList);
+    addListeners();
   };
 
   const shuffleArr = function (array) {
@@ -40,6 +42,7 @@
     const randomElements = shuffleArr(picturesList).slice(0, MAX_RANDOM_ELEMENTS_AMOUNT);
 
     addServerPictures(randomElements);
+    addListeners();
   };
 
   const showDiscussedPictures = function () {
@@ -49,6 +52,7 @@
     });
 
     addServerPictures(sortedList);
+    addListeners();
   };
 
   const imgFiltersClickHandler = window.debounce(function (evt) {
