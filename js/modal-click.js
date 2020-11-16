@@ -5,7 +5,6 @@
   const renderBigPicture = window.bigPicture.renderBigPicture;
   const moreLoadComments = window.bigPicture.moreLoadComments;
   const closeModal = bigPicture.querySelector(`.big-picture__cancel`);
-
   // const body = window.overlay.body;
 
   const picturesContainer = window.data.PICTURE_CONTAINER;
