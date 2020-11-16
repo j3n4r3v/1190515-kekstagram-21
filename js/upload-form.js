@@ -1,7 +1,7 @@
 'use strict';
 (function () {
 
-  const form = window.overlay.form;
+  const form = window.scale.form;
   const mainNode = document.querySelector(`main`);
   const uploadSuccess = document.querySelector(`#success`).content.querySelector(`.success`);
   const uploadError = document.querySelector(`#error`).content.querySelector(`.error`);

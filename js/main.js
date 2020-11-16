@@ -9,7 +9,7 @@
     });
   };
 
-  const successHandler = function (response) {
+  const successHandler = (response) => {
     const picturesList = response.map((photo) => {
       const obj = {id: guid()};
       Object.assign(photo, obj);
@@ -24,7 +24,7 @@
     };
   };
 
-  const errorHandler = function (errorMessage) {
+  const errorHandler = (errorMessage) => {
     const node = document.createElement(`div`);
     node.style = `z-index: 100; margin: auto; text-align: center; background-color: green;`;
     node.style.position = `absolute`;

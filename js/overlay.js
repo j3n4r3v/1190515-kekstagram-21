@@ -25,7 +25,7 @@
     return;
   };
 
-  const openOverlay = function () {
+  const openOverlay = () => {
     uploadOverlay.classList.remove(`hidden`);
     body.classList.add(`modal-open`);
     window.effects.filterScale.classList.add(`hidden`);
@@ -36,7 +36,7 @@
     form.addEventListener(`submit`, window.form.formSubmit);
   };
 
-  const closeOverlay = function () {
+  const closeOverlay = () => {
     uploadOverlay.classList.add(`hidden`);
     body.classList.remove(`modal-open`);
     document.removeEventListener(`keydown`, onOverlayEscPush);
@@ -51,7 +51,7 @@
     imgPreview.style.filter = ``;
     imgPreview.className = ``;
     window.form.hashtagsText.value = ``;
-    window.overlay.form.reset();
+    window.scale.form.reset();
   };
 
   upload.addEventListener(`change`, function () {
@@ -63,8 +63,6 @@
   });
 
   window.overlay = {
-    imgPreview,
-    form,
     closeOverlay,
     body
   };

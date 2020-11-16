@@ -10,19 +10,19 @@
   const filterRandom = imgFilters.querySelector(`#filter-random`);
   const filterDiscussed = imgFilters.querySelector(`#filter-discussed`);
 
-  const toggleActiveFilter = function (selectedFilter) {
+  const toggleActiveFilter = (selectedFilter) => {
     const activeFilter = imgFilters.querySelector(`.img-filters__button--active`);
 
     activeFilter.classList.remove(`img-filters__button--active`);
     selectedFilter.classList.add(`img-filters__button--active`);
   };
 
-  const showDefaultPictures = function () {
+  const showDefaultPictures = () => {
 
     addServerPictures(window.main.picturesList);
   };
 
-  const shuffleArr = function (array) {
+  const shuffleArr = (array) => {
     const arrayCopy = array.slice();
     const iterations = MAX_RANDOM_ELEMENTS_AMOUNT < arrayCopy.length ? MAX_RANDOM_ELEMENTS_AMOUNT : arrayCopy.length - 1;
 
@@ -36,13 +36,13 @@
     return arrayCopy;
   };
 
-  const showRandomPictures = function () {
+  const showRandomPictures = () => {
     const randomElements = shuffleArr(window.main.picturesList).slice(0, MAX_RANDOM_ELEMENTS_AMOUNT);
 
     addServerPictures(randomElements);
   };
 
-  const showDiscussedPictures = function () {
+  const showDiscussedPictures = () => {
     const picturesListCopy = window.main.picturesList.slice();
     const sortedList = picturesListCopy.sort(function (second, first) {
       return first.comments.length - second.comments.length;

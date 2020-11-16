@@ -16,9 +16,9 @@
   const effectLevel = document.querySelector(`.effect-level`);
   const effectLevelLine = effectLevel.querySelector(`.effect-level__line`);
   const effectLevelDepth = effectLevel.querySelector(`.effect-level__depth`);
-  const imageUploadPreview = window.overlay.imgPreview;
+  const imageUploadPreview = window.scale.imgPreview;
 
-  const effectChangeHandler = function (evt) {
+  const effectChangeHandler = (evt) => {
     if (evt.target.matches(`input[type='radio']`)) {
       effectLevelValue.value = MAX_INVERT_VALUE;
       effectLevelPin.style.left = MAX_PERCENT_VALUE + `%`;
@@ -35,7 +35,7 @@
     }
   };
 
-  const getValueRange = function (value, min, max) {
+  const getValueRange = (value, min, max) => {
     return value * (max - min) + min;
   };
 
@@ -46,7 +46,7 @@
   const MIN_BRIGHTNESS_VALUE = 1;
   const MAX_BRIGHTNESS_VALUE = 3;
 
-  const effectLevelHandler = function (levelValue) {
+  const effectLevelHandler = (levelValue) => {
     const proportion = levelValue / MAX_PERCENT_VALUE;
     if (imageUploadPreview.className.match(`effects__preview--`)) {
       switch (imageUploadPreview.className) {

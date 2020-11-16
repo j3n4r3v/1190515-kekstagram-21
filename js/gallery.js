@@ -3,9 +3,9 @@
   const PICTURE_TEMPLATE = document.querySelector(`#picture`)
     .content
     .querySelector(`.picture`);
-  const containerPictures = document.querySelector(`.pictures`);
+  const containerPictures = window.data.PICTURE_CONTAINER;
 
-  let renderPhoto = function (photo) {
+  let renderPhoto = (photo) => {
     const pictureElement = PICTURE_TEMPLATE.cloneNode(true);
     pictureElement.setAttribute(`id`, photo.id);
     pictureElement.querySelector(`.picture__likes`).textContent = photo.likes;
@@ -15,7 +15,7 @@
     return pictureElement;
   };
 
-  const addServerPictures = function (pictures) {
+  const addServerPictures = (pictures) => {
     const photosFragment = document.createDocumentFragment();
     for (let i = 0; i < pictures.length; i++) {
       photosFragment.appendChild(renderPhoto(pictures[i]));
@@ -23,7 +23,7 @@
     window.data.PICTURE_CONTAINER.appendChild(photosFragment);
   };
 
-  const removeUsersPictures = function () {
+  const removeUsersPictures = () => {
     const shownPictures = containerPictures.querySelectorAll(`.picture`);
     shownPictures.forEach(function (picture) {
       containerPictures.removeChild(picture);
