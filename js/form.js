@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  const hashtagsText = document.querySelector(`.text__hashtags`); // Поле для хэш-тега
+  const hashtagsText = document.querySelector(`.text__hashtags`);
   const MAX_HASHTAGS_AMOUNT = 5;
   const MAX_HASHTAG_CHARACTERS = 20;
   const HASHTAG_PATTERN = /^[\w]*$/;
