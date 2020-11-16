@@ -17,7 +17,7 @@
     success: ``
   };
 
-  const hashtagsRepeat = function (hashtag, hashtaglist) {
+  const hashtagsRepeat = (hashtag, hashtaglist) => {
     for (let j = 0; j < hashtaglist.length; j++) {
       if (hashtag === hashtaglist[j]) {
         return true;
@@ -26,7 +26,7 @@
     return false;
   };
 
-  const hashtagValidity = function () { // Проверяем на валидность введенный хештег
+  const hashtagValidity = () => {
     let customValidityMessage = ``;
     const hashes = hashtagsText.value.toLowerCase().trim();
     const hashtags = hashes.split(` `);
@@ -65,7 +65,7 @@
   const formSubmit = (evt) => {
     evt.preventDefault();
     if (onTextHashtagsInput) {
-      window.overlay.form.submit();
+      window.scale.form.submit();
     }
   };
 

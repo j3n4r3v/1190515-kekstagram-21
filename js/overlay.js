@@ -1,18 +1,19 @@
 'use strict';
 (function () {
-  const STEP = 25;
-  const MIN_SCALE = STEP;
-  const MAX_SCALE = 100;
-  const scaleDecrease = document.querySelector(`.scale__control--smaller`); // Уменьшить размер изображения
-  const scaleIncrease = document.querySelector(`.scale__control--bigger`); //  Увеличить размера изображения
-  const scaleValue = document.querySelector(`.scale__control--value`); // Величина изображения
-  const form = document.querySelector(`.img-upload__form`); // Форма для отправки данных
-  const imgPreview = form.querySelector(`.img-upload__preview img`); // Предварительный просмотр изображения - маленькое фото
+
   const upload = document.querySelector(`#upload-file`);
   const uploadOverlay = document.querySelector(`.img-upload__overlay`);
   const uploadCancel = uploadOverlay.querySelector(`#upload-cancel`);
   const body = document.querySelector(`body`);
-  const commentsText = form.querySelector(`.text__description`);
+
+  const imgPreview = window.scale.imgPreview;
+  const form = window.scale.form;
+  const commentsText = window.scale.commentsText;
+  const scaleDecrease = window.scale.scaleDecrease;
+  const scaleIncrease = window.scale.scaleIncrease;
+  const decreaseScale = window.scale.decreaseScale;
+  const increaseScale = window.scale.increaseScale;
+
 
   const onOverlayEscPush = (evt) => {
     if (window.form.hashtagsText === document.activeElement || commentsText === document.activeElement) {
@@ -24,35 +25,7 @@
     return;
   };
 
-  const decreaseScale = function () {
-    const value = parseInt(scaleValue.value, 10);
-    if (value > MIN_SCALE) {
-      const valueNew = value - MIN_SCALE;
-      scaleValue.value = valueNew + `%`;
-      const valueTransform = valueNew / MAX_SCALE;
-      imgPreview.style.transform = `scale(${valueTransform})`;
-    }
-  };
-
-  const increaseScale = function () {
-    const value = parseInt(scaleValue.value, 10);
-    if (value < MAX_SCALE) {
-      const valueNew = value + MIN_SCALE;
-      scaleValue.value = valueNew + `%`;
-      const valueTransform = valueNew / MAX_SCALE;
-      imgPreview.style.transform = `scale(${valueTransform})`;
-    }
-  };
-
-  scaleDecrease.addEventListener(`click`, function () {
-    decreaseScale();
-  });
-
-  scaleIncrease.addEventListener(`click`, function () {
-    increaseScale();
-  });
-
-  const openOverlay = function () {
+  const openOverlay = () => {
     uploadOverlay.classList.remove(`hidden`);
     body.classList.add(`modal-open`);
     window.effects.filterScale.classList.add(`hidden`);
@@ -63,7 +36,7 @@
     form.addEventListener(`submit`, window.form.formSubmit);
   };
 
-  const closeOverlay = function () {
+  const closeOverlay = () => {
     uploadOverlay.classList.add(`hidden`);
     body.classList.remove(`modal-open`);
     document.removeEventListener(`keydown`, onOverlayEscPush);
@@ -78,6 +51,7 @@
     imgPreview.style.filter = ``;
     imgPreview.className = ``;
     window.form.hashtagsText.value = ``;
+    window.scale.form.reset();
   };
 
   upload.addEventListener(`change`, function () {
@@ -89,10 +63,8 @@
   });
 
   window.overlay = {
-    imgPreview,
-    uploadCancel,
-    form,
-    closeOverlay
+    closeOverlay,
+    body
   };
 
 })();

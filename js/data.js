@@ -28,7 +28,7 @@
     `Константа`,
   ];
 
-  const generateComments = function (amount) {
+  const generateComments = (amount) => {
     const comments = [];
     for (let i = 0; i < amount; i++) {
       comments.push({

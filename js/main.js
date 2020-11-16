@@ -1,18 +1,30 @@
 'use strict';
 (function () {
-  const successHandler = function (response) {
-    window.xhrResponse = response;
-    const photosFragment = document.createDocumentFragment();
-    for (let i = 0; i < window.xhrResponse.length; i++) {
-      photosFragment.append(window.mock.renderPhoto(window.xhrResponse[i]));
-    }
-    window.data.PICTURE_CONTAINER.append(photosFragment);
+  const imgFilters = document.querySelector(`.img-filters`);
+
+  const guid = () => {
+    return `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`.replace(/[xy]/g, function (c) {
+      const r = Math.random() * 16 | 0; const v = c === `x` ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  };
+
+  const successHandler = (response) => {
+    const picturesList = response.map((photo) => {
+      const obj = {id: guid()};
+      Object.assign(photo, obj);
+      return photo;
+    });
+
+    window.gallery.addServerPictures(picturesList);
+    imgFilters.classList.remove(`img-filters--inactive`);
+
     window.main = {
-      response
+      picturesList
     };
   };
 
-  const errorHandler = function (errorMessage) {
+  const errorHandler = (errorMessage) => {
     const node = document.createElement(`div`);
     node.style = `z-index: 100; margin: auto; text-align: center; background-color: green;`;
     node.style.position = `absolute`;
@@ -23,6 +35,10 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  window.load(successHandler, errorHandler);
+  window.main = {
+    imgFilters
+  };
+
+  window.server.load(successHandler, errorHandler);
 
 })();
