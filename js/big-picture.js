@@ -3,7 +3,6 @@
   const bigPicture = document.querySelector(`.big-picture`);
   const commentsLoader = bigPicture.querySelector(`.comments-loader`);
   const socialComments = bigPicture.querySelector(`.social__comments`);
-  // const socialCommentCount = bigPicture.querySelector(`.social__comment-count`);
 
   const renderBigPicture = (currentPhoto) => {
     bigPicture.querySelector(`.big-picture__img img`).setAttribute(`src`, `${currentPhoto.url}`);
@@ -13,9 +12,6 @@
     bigPicture.querySelector(`.social__comments`).innerHTML = ``;
     renderBigPictureComments(currentPhoto.comments, socialComments);
     hiddenComment();
-    // commentsLoader.classList.remove(`hidden`);
-    // const body = document.querySelector(`body`);
-    // body.classList.add(`modal-open`);
 
     let commentsArray = [];
     commentsArray = currentPhoto.comments;

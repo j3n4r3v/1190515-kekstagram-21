@@ -6,9 +6,7 @@
   const moreLoadComments = window.bigPicture.moreLoadComments;
   const closeModal = bigPicture.querySelector(`.big-picture__cancel`);
 
-  // const body = window.overlay.body;
-
-  const picturesContainer = window.data.PICTURE_CONTAINER;
+  const picturesContainer = window.data.PICTURES_CONTAINER;
 
   const modalOpen = (evt) => {
     const targetId = evt.target.closest(`.picture`).getAttribute(`id`);
@@ -16,12 +14,10 @@
       item.id === targetId);
     renderBigPicture(targetObject);
     bigPicture.classList.remove(`hidden`);
-    // body.classList.add(`modal-open`);
   };
 
   const modalClose = () => {
     bigPicture.classList.add(`hidden`);
-    // body.classList.remove(`modal-open`);
     document.removeEventListener(`keydown`, onModalEscPush);
     closeModal.removeEventListener(`click`, modalClose);
     commentsLoader.removeEventListener(`click`, moreLoadComments);
@@ -44,7 +40,7 @@
   };
 
   const picturesContainerClickHandler = (evt) => {
-    if (evt.target.classList.contains(`picture__img`)) {
+    if (evt.target.classList.contains(`picture`) || evt.target.classList.contains(`picture__img`)) {
       modalOpen(evt);
       addCloseHandlers();
     }

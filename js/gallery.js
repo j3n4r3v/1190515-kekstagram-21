@@ -3,7 +3,7 @@
   const PICTURE_TEMPLATE = document.querySelector(`#picture`)
     .content
     .querySelector(`.picture`);
-  const containerPictures = window.data.PICTURE_CONTAINER;
+  const containerPictures = window.data.PICTURES_CONTAINER;
 
   let renderPhoto = (photo) => {
     const pictureElement = PICTURE_TEMPLATE.cloneNode(true);
@@ -20,7 +20,7 @@
     for (let i = 0; i < pictures.length; i++) {
       photosFragment.appendChild(renderPhoto(pictures[i]));
     }
-    window.data.PICTURE_CONTAINER.appendChild(photosFragment);
+    window.data.PICTURES_CONTAINER.appendChild(photosFragment);
   };
 
   const removeUsersPictures = () => {

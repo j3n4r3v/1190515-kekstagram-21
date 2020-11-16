@@ -1,7 +1,7 @@
 'use strict';
 (function () {
 
-  const PICTURE_CONTAINER = document.querySelector(`.pictures`);
+  const PICTURES_CONTAINER = document.querySelector(`.pictures`);
   const PHOTOS_AMOUNT = 25;
   const MIN_COMMENTS = 2;
   const MAX_COMMENTS = 6;
@@ -41,7 +41,7 @@
   };
 
   window.data = {
-    PICTURE_CONTAINER,
+    PICTURES_CONTAINER,
     PHOTOS_AMOUNT,
     generateComments,
     MIN_COMMENTS,
