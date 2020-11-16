@@ -22,7 +22,6 @@
     if (evt.key === window.utils.KEYDOWN.esc) {
       closeOverlay();
     }
-    return;
   };
 
   const openOverlay = () => {
