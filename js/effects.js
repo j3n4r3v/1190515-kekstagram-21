@@ -1,14 +1,6 @@
 'use strict';
 
 (function () {
-  const EFFECTS = {
-    chrome: `effects__preview--chrome`,
-    sepia: `effects__preview--sepia`,
-    marvin: `effects__preview--marvin`,
-    phobos: `effects__preview--phobos`,
-    heat: `effects__preview--heat`,
-  };
-
   const filterScale = document.querySelector(`.img-upload__effect-level`);
   const effectLine = filterScale.querySelector(`.effect-level__depth`);
   const effectLevelPin = filterScale.querySelector(`.effect-level__pin`);
@@ -17,6 +9,24 @@
   const effectLevelLine = effectLevel.querySelector(`.effect-level__line`);
   const effectLevelDepth = effectLevel.querySelector(`.effect-level__depth`);
   const imageUploadPreview = window.scale.imgPreview;
+
+  const MAX_GRAYSCALE_VALUE = 1;
+  const MAX_SEPIA_VALUE = 1;
+  const MAX_INVERT_VALUE = 100;
+  const MAX_BLUR_VALUE = 3;
+  const MIN_BRIGHTNESS_VALUE = 1;
+  const MAX_BRIGHTNESS_VALUE = 3;
+
+  const MIN_PERCENT_VALUE = 0;
+  const MAX_PERCENT_VALUE = 100;
+
+  const EFFECTS = {
+    chrome: `effects__preview--chrome`,
+    sepia: `effects__preview--sepia`,
+    marvin: `effects__preview--marvin`,
+    phobos: `effects__preview--phobos`,
+    heat: `effects__preview--heat`,
+  };
 
   const effectChangeHandler = (evt) => {
     if (evt.target.matches(`input[type='radio']`)) {
@@ -38,13 +48,6 @@
   const getValueRange = (value, min, max) => {
     return value * (max - min) + min;
   };
-
-  const MAX_GRAYSCALE_VALUE = 1;
-  const MAX_SEPIA_VALUE = 1;
-  const MAX_INVERT_VALUE = 100;
-  const MAX_BLUR_VALUE = 3;
-  const MIN_BRIGHTNESS_VALUE = 1;
-  const MAX_BRIGHTNESS_VALUE = 3;
 
   const effectLevelHandler = (levelValue) => {
     const proportion = levelValue / MAX_PERCENT_VALUE;
@@ -70,9 +73,6 @@
       }
     }
   };
-
-  const MIN_PERCENT_VALUE = 0;
-  const MAX_PERCENT_VALUE = 100;
 
   effectLevelPin.addEventListener(`mousedown`, (evt) => {
     evt.preventDefault();

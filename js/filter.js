@@ -51,7 +51,7 @@
     addServerPictures(sortedList);
   };
 
-  const imgFiltersClickHandler = window.debounce(function (evt) {
+  const imgFiltersClickHandler = window.debounce((evt) => {
     toggleActiveFilter(evt.target);
     removeUsersPictures();
 
