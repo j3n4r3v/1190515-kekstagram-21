@@ -33,7 +33,7 @@
     }
     socialCommentCount.textContent = `${index} из ${photoComments.length} комментариев`;
     socialComments.append(comments);
-    if (fiveComments.length < NEW_COMMENTS || count === photoComments.length) {
+    if (count === photoComments.length) {
       socialCommentCount.textContent = `${photoComments.length} из ${photoComments.length} комментариев`;
       commentsLoader.classList.add(`hidden`);
     }

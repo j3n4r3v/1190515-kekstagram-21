@@ -66,9 +66,8 @@
     if (textDescription.value.length > MAX_TEXT_CHARACTERS) {
       customValidityMessage = `${VALIDATION_MESSAGES.commentLength}`;
       textDescription.setCustomValidity(customValidityMessage);
-    } else {
-      textDescription.setCustomValidity(customValidityMessage);
     }
+    textDescription.setCustomValidity(customValidityMessage);
     textDescription.reportValidity();
   };
 
