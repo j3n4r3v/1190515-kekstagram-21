@@ -2,9 +2,9 @@
 (function () {
   const hashtagsText = document.querySelector(`.text__hashtags`);
   const textDescription = document.querySelector(`.text__description`);
+  const MAX_TEXT_CHARACTERS = 140;
   const MAX_HASHTAGS_AMOUNT = 5;
   const MAX_HASHTAG_CHARACTERS = 20;
-  const MAX_TEXT_CHARACTERS = 140;
   const HASHTAG_PATTERN = /^[\w]*$/;
 
 
@@ -65,7 +65,6 @@
     let customValidityMessage = ``;
     if (textDescription.value.length > MAX_TEXT_CHARACTERS) {
       customValidityMessage = `${VALIDATION_MESSAGES.commentLength}`;
-      textDescription.setCustomValidity(customValidityMessage);
     }
     textDescription.setCustomValidity(customValidityMessage);
     textDescription.reportValidity();
