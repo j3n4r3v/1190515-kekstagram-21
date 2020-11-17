@@ -31,6 +31,7 @@
     document.addEventListener(`keydown`, onOverlayEscPush);
     window.form.hashtagsText.addEventListener(`input`, window.form.onTextHashtagsInput);
     window.effects.effectLevelPin.addEventListener(`mouseup`, window.effects.effectLevelHandler);
+    window.form.textDescription.addEventListener(`input`, window.form.onTextDescriptionInput);
     form.addEventListener(`change`, window.effects.effectChangeHandler);
     form.addEventListener(`submit`, window.form.formSubmit);
   };
@@ -43,6 +44,7 @@
     scaleIncrease.removeEventListener(`click`, increaseScale);
     window.form.hashtagsText.removeEventListener(`input`, window.form.onTextHashtagsInput);
     window.effects.effectLevelPin.removeEventListener(`mouseup`, window.effects.effectLevelHandler);
+    window.form.textDescription.removeEventListener(`input`, window.form.onTextDescriptionInput);
     form.removeEventListener(`change`, window.effects.effectChangeHandler);
     form.removeEventListener(`submit`, window.form.formSubmit);
     upload.value = ``;

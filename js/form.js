@@ -1,8 +1,10 @@
 'use strict';
 (function () {
   const hashtagsText = document.querySelector(`.text__hashtags`);
+  const textDescription = document.querySelector(`.text__description`);
   const MAX_HASHTAGS_AMOUNT = 5;
   const MAX_HASHTAG_CHARACTERS = 20;
+  const MAX_TEXT_CHARACTERS = 140;
   const HASHTAG_PATTERN = /^[\w]*$/;
 
 
@@ -14,6 +16,7 @@
     numberTags: `длина хэштега не более 20 символов.`,
     hashTagStarts: `xеш-тег не может состоять только из одного #.`,
     hashTagFirstSymbol: `xеш - тег должен начинаться #.`,
+    commentLength: `длина комментария не может составлять больше 140 символов.`,
     success: ``
   };
 
@@ -58,20 +61,37 @@
     }
   };
 
+  const descriptionValidity = () => {
+    let customValidityMessage = ``;
+    if (textDescription.value.length > MAX_TEXT_CHARACTERS) {
+      customValidityMessage = `${VALIDATION_MESSAGES.commentLength}`;
+      textDescription.setCustomValidity(customValidityMessage);
+    } else {
+      textDescription.setCustomValidity(customValidityMessage);
+    }
+    textDescription.reportValidity();
+  };
+
   const onTextHashtagsInput = () => {
     hashtagValidity();
   };
 
+  const onTextDescriptionInput = () => {
+    descriptionValidity();
+  };
+
   const formSubmit = (evt) => {
     evt.preventDefault();
-    if (onTextHashtagsInput) {
+    if (onTextHashtagsInput && onTextDescriptionInput) {
       window.scale.form.submit();
     }
   };
 
   window.form = {
     hashtagsText,
+    textDescription,
     formSubmit,
-    onTextHashtagsInput
+    onTextHashtagsInput,
+    onTextDescriptionInput
   };
 })();
