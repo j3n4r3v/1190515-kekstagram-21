@@ -23,16 +23,17 @@
 
   const commentsGetMoreHandler = () => {
     const commentsList = document.querySelectorAll(`.social__comment`);
-    const count = commentsList.length;
+    let count = commentsList.length;
     const index = count + NEW_COMMENTS;
     const fiveComments = photoComments.slice(count, index);
     const comments = document.createDocumentFragment();
     for (let i = 0; i < fiveComments.length; i++) {
+      count++;
       comments.appendChild(renderComment(fiveComments[i]));
     }
     socialCommentCount.textContent = `${index} из ${photoComments.length} комментариев`;
     socialComments.append(comments);
-    if (fiveComments.length < NEW_COMMENTS) {
+    if (fiveComments.length < NEW_COMMENTS || count === photoComments.length) {
       socialCommentCount.textContent = `${photoComments.length} из ${photoComments.length} комментариев`;
       commentsLoader.classList.add(`hidden`);
     }
