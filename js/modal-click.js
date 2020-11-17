@@ -1,10 +1,10 @@
 'use strict';
 (function () {
-  const bigPicture = window.bigPicture.bigPicture;
+  const bigPhoto = window.bigPicture.bigPhoto;
   const commentsLoader = window.bigPicture.commentsLoader;
-  const renderBigPicture = window.bigPicture.renderBigPicture;
-  const moreLoadComments = window.bigPicture.moreLoadComments;
-  const closeModal = bigPicture.querySelector(`.big-picture__cancel`);
+  const renderBigPhoto = window.bigPicture.renderBigPhoto;
+  const commentsGetMoreHandler = window.bigPicture.commentsGetMoreHandler;
+  const closeModal = bigPhoto.querySelector(`.big-picture__cancel`);
   const body = window.overlay.body;
   const picturesContainer = window.data.PICTURES_CONTAINER;
 
@@ -12,17 +12,19 @@
     const targetId = evt.target.closest(`.picture`).getAttribute(`id`);
     const targetObject = window.main.picturesList.find((item) =>
       item.id === targetId);
-    renderBigPicture(targetObject);
-    bigPicture.classList.remove(`hidden`);
+    renderBigPhoto(targetObject);
+    bigPhoto.classList.remove(`hidden`);
     body.classList.add(`modal-open`);
+    commentsLoader.addEventListener(`click`, commentsGetMoreHandler);
   };
 
   const modalClose = () => {
-    bigPicture.classList.add(`hidden`);
+    bigPhoto.classList.add(`hidden`);
     body.classList.remove(`modal-open`);
+    commentsLoader.classList.remove(`hidden`);
     document.removeEventListener(`keydown`, onModalEscPush);
     closeModal.removeEventListener(`click`, modalClose);
-    commentsLoader.removeEventListener(`click`, moreLoadComments);
+    commentsLoader.removeEventListener(`click`, commentsGetMoreHandler);
   };
 
   const onModalEscPush = (evt) => {

@@ -1,7 +1,7 @@
 'use strict';
 (function () {
-  const MAX_RANDOM_ELEMENTS_AMOUNT = 10;
-
+  const MAX_RANDOM_ELEMENTS_AMOUNT = window.utils.MAX_RANDOM_ELEMENTS_AMOUNT;
+  const shuffleArr = window.utils.shuffleArr;
   const removeUsersPictures = window.gallery.removeUsersPictures;
   const addServerPictures = window.gallery.addServerPictures;
   const imgFilters = window.main.imgFilters;
@@ -20,20 +20,6 @@
   const showDefaultPictures = () => {
 
     addServerPictures(window.main.picturesList);
-  };
-
-  const shuffleArr = (array) => {
-    const arrayCopy = array.slice();
-    const iterations = MAX_RANDOM_ELEMENTS_AMOUNT < arrayCopy.length ? MAX_RANDOM_ELEMENTS_AMOUNT : arrayCopy.length - 1;
-
-    for (let i = 0; i < iterations; i++) {
-      const randomIndex = Math.floor(Math.random() * (arrayCopy.length - i)) + i;
-      const currentElement = arrayCopy[i];
-      arrayCopy[i] = arrayCopy[randomIndex];
-      arrayCopy[randomIndex] = currentElement;
-    }
-
-    return arrayCopy;
   };
 
   const showRandomPictures = () => {
