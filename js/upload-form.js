@@ -2,6 +2,7 @@
 (function () {
 
   const form = window.scale.form;
+  const onСlose = window.overlay.onСlose;
   const mainNode = document.querySelector(`main`);
   const uploadSuccess = document.querySelector(`#success`).content.querySelector(`.success`);
   const uploadError = document.querySelector(`#error`).content.querySelector(`.error`);
@@ -50,7 +51,7 @@
   const onSubmit = (evt) => {
     evt.preventDefault();
     window.server.upload(new FormData(form), onUploadSuccess, onUploadError);
-    window.overlay.onСlose();
+    onСlose();
   };
 
   form.addEventListener(`submit`, onSubmit);

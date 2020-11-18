@@ -30,7 +30,7 @@
 
   const showDiscussedPictures = () => {
     const picturesListCopy = window.main.picturesList.slice();
-    const sortedList = picturesListCopy.sort(function (second, first) {
+    const sortedList = picturesListCopy.sort((second, first) => {
       return first.comments.length - second.comments.length;
     });
 

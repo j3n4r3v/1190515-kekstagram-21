@@ -26,7 +26,7 @@
 
   const removeUsersPictures = () => {
     const shownPictures = containerPictures.querySelectorAll(`.picture`);
-    shownPictures.forEach(function (picture) {
+    shownPictures.forEach((picture) => {
       containerPictures.removeChild(picture);
     });
   };
