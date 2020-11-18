@@ -3,8 +3,8 @@
   const STEP = 25;
   const MIN_SCALE = 25;
   const MAX_SCALE = 100;
-  const scaleDecrease = document.querySelector(`.scale__control--smaller`);
-  const scaleIncrease = document.querySelector(`.scale__control--bigger`);
+  const sizeDecrease = document.querySelector(`.scale__control--smaller`);
+  const sizeIncrease = document.querySelector(`.scale__control--bigger`);
   const scaleValue = document.querySelector(`.scale__control--value`);
   const form = document.querySelector(`.img-upload__form`);
   const imgPreview = form.querySelector(`.img-upload__preview img`);
@@ -23,32 +23,24 @@
     }
   };
 
-  const decreaseScale = () => {
+  const onDecrease = () => {
     const currentValue = scaleValue.value;
     setScaleValue(parseInt(currentValue, 10) - STEP);
   };
 
-  const increaseScale = () => {
+  const onIncrease = () => {
     const currentValue = scaleValue.value;
     setScaleValue(parseInt(currentValue, 10) + STEP);
   };
-
-  scaleDecrease.addEventListener(`click`, function () {
-    decreaseScale();
-  });
-
-  scaleIncrease.addEventListener(`click`, function () {
-    increaseScale();
-  });
 
   window.scale = {
     imgPreview,
     form,
     commentsText,
-    scaleDecrease,
-    scaleIncrease,
-    decreaseScale,
-    increaseScale
+    sizeDecrease,
+    sizeIncrease,
+    onDecrease,
+    onIncrease
   };
 
 })();

@@ -9,62 +9,60 @@
   const imgPreview = window.scale.imgPreview;
   const form = window.scale.form;
   const commentsText = window.scale.commentsText;
-  const scaleDecrease = window.scale.scaleDecrease;
-  const scaleIncrease = window.scale.scaleIncrease;
-  const decreaseScale = window.scale.decreaseScale;
-  const increaseScale = window.scale.increaseScale;
+  const sizeDecrease = window.scale.sizeDecrease;
+  const sizeIncrease = window.scale.sizeIncrease;
+  const onDecrease = window.scale.onDecrease;
+  const onIncrease = window.scale.onIncrease;
 
 
   const onOverlayEscPush = (evt) => {
-    if (window.form.hashtagsText === document.activeElement || commentsText === document.activeElement) {
+    if (window.form.textHashtags === document.activeElement || commentsText === document.activeElement) {
       return;
     }
     if (evt.key === window.utils.KEYDOWN.esc) {
-      closeOverlay();
+      onСlose();
     }
   };
 
-  const openOverlay = () => {
+  const onOpen = () => {
     uploadOverlay.classList.remove(`hidden`);
     body.classList.add(`modal-open`);
     window.effects.filterScale.classList.add(`hidden`);
     document.addEventListener(`keydown`, onOverlayEscPush);
-    window.form.hashtagsText.addEventListener(`input`, window.form.onTextHashtagsInput);
-    window.effects.effectLevelPin.addEventListener(`mouseup`, window.effects.effectLevelHandler);
+    sizeDecrease.addEventListener(`click`, onDecrease);
+    sizeIncrease.addEventListener(`click`, onIncrease);
+    window.form.textHashtags.addEventListener(`input`, window.form.onTextHashtagsInput);
+    window.effects.onLevelPin.addEventListener(`mouseup`, window.effects.onLevel);
     window.form.textDescription.addEventListener(`input`, window.form.onTextDescriptionInput);
-    form.addEventListener(`change`, window.effects.effectChangeHandler);
-    form.addEventListener(`submit`, window.form.formSubmit);
+    form.addEventListener(`change`, window.effects.onChange);
+    form.addEventListener(`submit`, window.form.onSubmit);
   };
 
-  const closeOverlay = () => {
+  const onСlose = () => {
     uploadOverlay.classList.add(`hidden`);
     body.classList.remove(`modal-open`);
     document.removeEventListener(`keydown`, onOverlayEscPush);
-    scaleDecrease.removeEventListener(`click`, decreaseScale);
-    scaleIncrease.removeEventListener(`click`, increaseScale);
-    window.form.hashtagsText.removeEventListener(`input`, window.form.onTextHashtagsInput);
-    window.effects.effectLevelPin.removeEventListener(`mouseup`, window.effects.effectLevelHandler);
+    sizeDecrease.removeEventListener(`click`, onDecrease);
+    sizeIncrease.removeEventListener(`click`, onIncrease);
+    window.form.textHashtags.removeEventListener(`input`, window.form.onTextHashtagsInput);
+    window.effects.onLevelPin.removeEventListener(`mouseup`, window.effects.onLevel);
     window.form.textDescription.removeEventListener(`input`, window.form.onTextDescriptionInput);
-    form.removeEventListener(`change`, window.effects.effectChangeHandler);
-    form.removeEventListener(`submit`, window.form.formSubmit);
+    form.removeEventListener(`change`, window.effects.onChange);
+    form.removeEventListener(`submit`, window.form.onSubmit);
     upload.value = ``;
     imgPreview.style.transform = `scale(1)`;
     imgPreview.style.filter = ``;
     imgPreview.className = ``;
-    window.form.hashtagsText.value = ``;
+    window.form.textHashtags.value = ``;
     window.scale.form.reset();
   };
 
-  upload.addEventListener(`change`, function () {
-    openOverlay();
-  });
+  upload.addEventListener(`change`, onOpen);
 
-  uploadCancel.addEventListener(`click`, function () {
-    closeOverlay();
-  });
+  uploadCancel.addEventListener(`click`, onСlose);
 
   window.overlay = {
-    closeOverlay,
+    onСlose,
     body
   };
 

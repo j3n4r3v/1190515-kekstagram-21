@@ -3,7 +3,7 @@
 (function () {
   const filterScale = document.querySelector(`.img-upload__effect-level`);
   const effectLine = filterScale.querySelector(`.effect-level__depth`);
-  const effectLevelPin = filterScale.querySelector(`.effect-level__pin`);
+  const onLevelPin = filterScale.querySelector(`.effect-level__pin`);
   const effectLevelValue = filterScale.querySelector(`.effect-level__value`);
   const effectLevel = document.querySelector(`.effect-level`);
   const effectLevelLine = effectLevel.querySelector(`.effect-level__line`);
@@ -28,10 +28,10 @@
     heat: `effects__preview--heat`,
   };
 
-  const effectChangeHandler = (evt) => {
+  const onChange = (evt) => {
     if (evt.target.matches(`input[type='radio']`)) {
       effectLevelValue.value = MAX_INVERT_VALUE;
-      effectLevelPin.style.left = MAX_PERCENT_VALUE + `%`;
+      onLevelPin.style.left = MAX_PERCENT_VALUE + `%`;
       effectLine.style.width = MAX_PERCENT_VALUE + `%`;
       if (evt.target.value in EFFECTS) {
         filterScale.classList.remove(`hidden`);
@@ -49,7 +49,7 @@
     return value * (max - min) + min;
   };
 
-  const effectLevelHandler = (levelValue) => {
+  const onLevel = (levelValue) => {
     const proportion = levelValue / MAX_PERCENT_VALUE;
     if (imageUploadPreview.className.match(`effects__preview--`)) {
       switch (imageUploadPreview.className) {
@@ -74,7 +74,7 @@
     }
   };
 
-  effectLevelPin.addEventListener(`mousedown`, (evt) => {
+  onLevelPin.addEventListener(`mousedown`, (evt) => {
     evt.preventDefault();
 
     let startCoords = {
@@ -92,14 +92,14 @@
         x: moveEvt.clientX,
       };
 
-      let pinCoordX = (effectLevelPin.offsetLeft - shift.x);
+      let pinCoordX = (onLevelPin.offsetLeft - shift.x);
       const levelLineWidth = effectLevelLine.offsetWidth;
       if (!(pinCoordX < MIN_PERCENT_VALUE || pinCoordX > levelLineWidth)) {
         const pinPoint = pinCoordX / effectLevelLine.offsetWidth;
-        effectLevelPin.style.left = pinCoordX + `px`;
+        onLevelPin.style.left = pinCoordX + `px`;
         effectLevelValue.value = Math.round(pinPoint * MAX_PERCENT_VALUE);
         effectLevelDepth.style.width = Math.round(pinPoint * MAX_PERCENT_VALUE) + `%`;
-        effectLevelHandler(effectLevelValue.value);
+        onLevel(effectLevelValue.value);
       }
     };
 
@@ -116,9 +116,9 @@
 
 
   window.effects = {
-    effectLevelHandler,
-    effectChangeHandler,
-    effectLevelPin,
+    onLevel,
+    onChange,
+    onLevelPin,
     filterScale
   };
 

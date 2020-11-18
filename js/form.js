@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  const hashtagsText = document.querySelector(`.text__hashtags`);
+  const textHashtags = document.querySelector(`.text__hashtags`);
   const textDescription = document.querySelector(`.text__description`);
   const MAX_TEXT_CHARACTERS = 140;
   const MAX_HASHTAGS_AMOUNT = 5;
@@ -31,7 +31,7 @@
 
   const hashtagValidity = () => {
     let customValidityMessage = ``;
-    const hashes = hashtagsText.value.toLowerCase().trim();
+    const hashes = textHashtags.value.toLowerCase().trim();
     const hashtags = hashes.split(` `);
     if (hashtags.length > MAX_HASHTAGS_AMOUNT) {
       customValidityMessage = `${VALIDATION_MESSAGES.maxTags}`;
@@ -55,9 +55,9 @@
       if (hashtagsRepeat(hashtags[i], hashtags.slice(i + 1))) {
         customValidityMessage = `${VALIDATION_MESSAGES.repeatTags}`;
       } else {
-        hashtagsText.setCustomValidity(customValidityMessage);
+        textHashtags.setCustomValidity(customValidityMessage);
       }
-      hashtagsText.reportValidity();
+      textHashtags.reportValidity();
     }
   };
 
@@ -78,7 +78,7 @@
     descriptionValidity();
   };
 
-  const formSubmit = (evt) => {
+  const onSubmit = (evt) => {
     evt.preventDefault();
     if (onTextHashtagsInput && onTextDescriptionInput) {
       window.scale.form.submit();
@@ -86,9 +86,9 @@
   };
 
   window.form = {
-    hashtagsText,
+    textHashtags,
     textDescription,
-    formSubmit,
+    onSubmit,
     onTextHashtagsInput,
     onTextDescriptionInput
   };

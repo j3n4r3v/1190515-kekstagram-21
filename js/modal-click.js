@@ -1,59 +1,59 @@
 'use strict';
 (function () {
-  const bigPhoto = window.bigPicture.bigPhoto;
+  const photo = window.bigPicture.photo;
   const commentsLoader = window.bigPicture.commentsLoader;
-  const renderBigPhoto = window.bigPicture.renderBigPhoto;
-  const commentsGetMoreHandler = window.bigPicture.commentsGetMoreHandler;
-  const closeModal = bigPhoto.querySelector(`.big-picture__cancel`);
+  const renderPhoto = window.bigPicture.renderPhoto;
+  const onCommentsGetMore = window.bigPicture.onCommentsGetMore;
+  const closeModal = photo.querySelector(`.big-picture__cancel`);
   const body = window.overlay.body;
   const picturesContainer = window.data.PICTURES_CONTAINER;
 
-  const modalOpen = (evt) => {
+  const onModalOpen = (evt) => {
     const targetId = evt.target.closest(`.picture`).getAttribute(`id`);
     const targetObject = window.main.picturesList.find((item) =>
       item.id === targetId);
-    renderBigPhoto(targetObject);
-    bigPhoto.classList.remove(`hidden`);
+    renderPhoto(targetObject);
+    photo.classList.remove(`hidden`);
     body.classList.add(`modal-open`);
-    commentsLoader.addEventListener(`click`, commentsGetMoreHandler);
+    commentsLoader.addEventListener(`click`, onCommentsGetMore);
   };
 
-  const modalClose = () => {
-    bigPhoto.classList.add(`hidden`);
+  const onModalClose = () => {
+    photo.classList.add(`hidden`);
     body.classList.remove(`modal-open`);
     commentsLoader.classList.remove(`hidden`);
     document.removeEventListener(`keydown`, onModalEscPush);
-    closeModal.removeEventListener(`click`, modalClose);
-    commentsLoader.removeEventListener(`click`, commentsGetMoreHandler);
+    closeModal.removeEventListener(`click`, onModalClose);
+    commentsLoader.removeEventListener(`click`, onCommentsGetMore);
   };
 
   const onModalEscPush = (evt) => {
     if (evt.key === window.utils.KEYDOWN.esc) {
       evt.preventDefault();
-      modalClose();
+      onModalClose();
     }
   };
 
-  const closeModalButton = () => {
-    modalClose();
+  const onModalCloseButton = () => {
+    onModalClose();
   };
 
-  const addCloseHandlers = () => {
-    closeModal.addEventListener(`click`, closeModalButton);
+  const addClosePhoto = () => {
+    closeModal.addEventListener(`click`, onModalCloseButton);
     document.addEventListener(`keydown`, onModalEscPush);
   };
 
-  const picturesContainerClickHandler = (evt) => {
+  const onClickPicturesContainer = (evt) => {
     if (evt.target.classList.contains(`picture`) || evt.target.classList.contains(`picture__img`)) {
-      modalOpen(evt);
-      addCloseHandlers();
+      onModalOpen(evt);
+      addClosePhoto();
     }
   };
 
-  picturesContainer.addEventListener(`click`, picturesContainerClickHandler);
+  picturesContainer.addEventListener(`click`, onClickPicturesContainer);
 
   window.modalClick = {
-    modalOpen
+    onModalOpen
   };
 
 })();

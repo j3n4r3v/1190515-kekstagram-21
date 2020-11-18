@@ -3,7 +3,7 @@
   const imgFilters = document.querySelector(`.img-filters`);
   const guid = window.utils.guid;
 
-  const successHandler = (response) => {
+  const onSuccess = (response) => {
     const picturesList = response.map((photo) => {
       const obj = {id: guid()};
       Object.assign(photo, obj);
@@ -18,7 +18,7 @@
     };
   };
 
-  const errorHandler = (errorMessage) => {
+  const onError = (errorMessage) => {
     const node = document.createElement(`div`);
     node.style = `z-index: 100; margin: auto; text-align: center; background-color: green;`;
     node.style.position = `absolute`;
@@ -33,6 +33,6 @@
     imgFilters
   };
 
-  window.server.load(successHandler, errorHandler);
+  window.server.load(onSuccess, onError);
 
 })();

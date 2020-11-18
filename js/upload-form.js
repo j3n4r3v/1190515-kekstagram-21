@@ -11,13 +11,13 @@
     const successTemplate = uploadSuccess.cloneNode(true);
     createFragment.append(successTemplate);
     mainNode.append(createFragment);
-    document.addEventListener(`click`, removeSuccessUpload);
+    document.addEventListener(`click`, onRemoveSuccessUpload);
     document.addEventListener(`keydown`, onSuccessMessageEsc);
   };
 
-  const removeSuccessUpload = () => {
+  const onRemoveSuccessUpload = () => {
     document.querySelector(`.success`).remove();
-    document.removeEventListener(`click`, removeSuccessUpload);
+    document.removeEventListener(`click`, onRemoveSuccessUpload);
     document.removeEventListener(`keydown`, onSuccessMessageEsc);
   };
 
@@ -25,33 +25,33 @@
     const errorTemplate = uploadError.cloneNode(true);
     createFragment.append(errorTemplate);
     mainNode.append(createFragment);
-    document.addEventListener(`click`, removeErrorUpload);
+    document.addEventListener(`click`, onRemoveErrorUpload);
     document.addEventListener(`keydown`, onErrorMessageEsc);
   };
 
-  const removeErrorUpload = () => {
+  const onRemoveErrorUpload = () => {
     document.querySelector(`.error`).remove();
-    document.removeEventListener(`click`, removeErrorUpload);
+    document.removeEventListener(`click`, onRemoveErrorUpload);
     document.removeEventListener(`keydown`, onErrorMessageEsc);
   };
 
   const onSuccessMessageEsc = (evt) => {
     if (evt.key === window.utils.KEYDOWN.esc) {
-      removeSuccessUpload();
+      onRemoveSuccessUpload();
     }
   };
 
   const onErrorMessageEsc = (evt) => {
     if (evt.key === window.utils.KEYDOWN.esc) {
-      removeErrorUpload();
+      onRemoveErrorUpload();
     }
   };
 
-  const submitHundler = (evt) => {
+  const onSubmit = (evt) => {
     evt.preventDefault();
     window.server.upload(new FormData(form), onUploadSuccess, onUploadError);
-    window.overlay.closeOverlay();
+    window.overlay.onСlose();
   };
 
-  form.addEventListener(`submit`, submitHundler);
+  form.addEventListener(`submit`, onSubmit);
 })();
